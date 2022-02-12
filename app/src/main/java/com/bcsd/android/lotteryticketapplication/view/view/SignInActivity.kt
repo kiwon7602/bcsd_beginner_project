@@ -29,6 +29,7 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        firebaseAuth = FirebaseAuth.getInstance()
 
         binding.signInButton.setOnClickListener {
             val userEmail = binding.userEmail.text.toString()

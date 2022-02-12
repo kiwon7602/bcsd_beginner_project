@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LotteryTicketApplication">
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.view.MyWinningActivity"
+            android:exported="true" />
         <activity
             android:name=".view.view.SignUpActivity"
             android:exported="true" />
