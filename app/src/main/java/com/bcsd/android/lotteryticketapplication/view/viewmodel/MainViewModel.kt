@@ -1,5 +1,7 @@
 package com.bcsd.android.lotteryticketapplication.view.viewmodel
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bcsd.android.lotteryticketapplication.view.model.LotteryNumber
@@ -15,19 +17,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainViewModel : ViewModel() {
     private lateinit var databaseReference: DatabaseReference
 
-    val email= MutableLiveData<String>()
+    val email = MutableLiveData<String>()
     val name = MutableLiveData<String>()
-    val money= MutableLiveData<Int>()
+    val money = MutableLiveData<Int>()
     val myLotteryNumbers = MutableLiveData<String>()
+    val myLotteryNumbersList = MutableLiveData<MutableList<MutableList<String>>>()
     val lotteryNumbers = MutableLiveData<ArrayList<Int>>()
     val date = MutableLiveData<String>()
+    val isRunning = MutableLiveData<ArrayList<Boolean>>()
 //    val lotteryNumber: MutableLiveData<ArrayList<Int>> by lazy {
 //        MutableLiveData()
 //    }
 
-    val isRunning = MutableLiveData<ArrayList<Boolean>>()
     val lotteryItems = ArrayList<Int>()
-    val isRunningItems : ArrayList<Boolean> = arrayListOf(false,false)
+    val myLotteryItems = mutableListOf<MutableList<String>>()
+    val isRunningItems: ArrayList<Boolean> = arrayListOf(false, false)
 
     fun updateLottoNumbers(lotteryList: ArrayList<Int>) { // 로또 당첨 번호 업데이트 함수
         lotteryItems.clear()
@@ -36,16 +40,35 @@ class MainViewModel : ViewModel() {
         lotteryNumbers.postValue(lotteryItems)
     }
 
-    fun updateIsRunning(index:Int, value : Boolean){ // 서버와 리얼타임데이터베이스 호출 완료 시 값 변경 함수
+    fun updateMyLotteryNumbers(myLotteryList: MutableList<MutableList<String>>){
+        myLotteryItems.clear()
+        myLotteryItems.addAll(myLotteryList)
+        myLotteryNumbersList.postValue(myLotteryList)
+    }
+
+    fun updateIsRunning(index: Int, value: Boolean) { // 서버와 리얼타임데이터베이스 호출 완료 시 값 변경 함수
         isRunningItems.set(index, value)
         isRunning.postValue(isRunningItems)
     }
 
-    fun createRealtimeDatabase(){ // 파이어베이스 리얼타임데이터베이스 연동
+    fun updateData(key:String, value:Any, context:Context){ // 데이터베이스 값 변경 업데이트
+        val firebaseAuth = FirebaseAuth.getInstance()
+        var map = mutableMapOf<String,Any>()
+        map[key] = value
+        databaseReference.child("UserAccount").child(firebaseAuth.currentUser?.uid.toString())
+            .updateChildren(map)
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    Toast.makeText(context, "데이터 업데이트 성공", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    fun createRealtimeDatabase() { // 파이어베이스 리얼타임데이터베이스 연동
         databaseReference = FirebaseDatabase.getInstance().getReference("User")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                updateIsRunning(0,true)
+                updateIsRunning(0, true)
                 val firebaseUser = FirebaseAuth.getInstance().currentUser
                 val a = snapshot.child("UserAccount").child(firebaseUser?.uid.toString())
                 for (i in a.children) {
@@ -55,10 +78,10 @@ class MainViewModel : ViewModel() {
                     if (i.key == "name") {
                         name.postValue(i.value.toString())
                     }
-                    if (i.key == "money"){
+                    if (i.key == "money") {
                         money.postValue(i.value.toString().toInt())
                     }
-                    if (i.key == "userLotteryNumbers"){
+                    if (i.key == "userLotteryNumbers") {
                         myLotteryNumbers.postValue(i.value.toString())
                     }
                 }
@@ -69,7 +92,7 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    fun createRetrofit(){ // Retrofit2 http 통신
+    fun createRetrofit() { // Retrofit2 http 통신
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api2.ysmstudio.be/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -77,8 +100,8 @@ class MainViewModel : ViewModel() {
         val service = retrofit.create(MainService::class.java)
         service.getLotteryNumber().enqueue(object : Callback<LotteryNumber> {
             override fun onResponse(call: Call<LotteryNumber>, response: Response<LotteryNumber>) {
-                if (response.isSuccessful){
-                    updateIsRunning(1,true)
+                if (response.isSuccessful) {
+                    updateIsRunning(1, true)
                     val result: LotteryNumber? = response.body()
                     updateLottoNumbers(result?.lottoNumbers!!)
                     date.postValue(result?.date)

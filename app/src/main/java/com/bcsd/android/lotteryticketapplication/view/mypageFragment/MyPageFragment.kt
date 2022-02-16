@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -41,17 +40,19 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observerData()
+        updateObserveData()
 
         binding.rechargeButton.setOnClickListener {
             rechargeMoney += 5000
             mainViewModel.money.postValue(rechargeMoney)
-            updataData(rechargeMoney)
+            mainViewModel.updateData("money", rechargeMoney, view.context)
         }
 
         binding.winningNumberButton.setOnClickListener {
             val intent = Intent(context, MyWinningActivity::class.java)
             intent.putExtra("winningNumbers",winningNumbers)
+            intent.putExtra("winningDate",mainViewModel.date.value)
+            intent.putExtra("myLotteryNumbers",mainViewModel.myLotteryNumbers.value)
             startActivity(intent)
         }
 
@@ -61,7 +62,10 @@ class MyPageFragment : Fragment() {
             startActivity(intent)
             activity?.finish()
         }
+
         binding.deleteAccountButton.setOnClickListener {
+            databaseReference = FirebaseDatabase.getInstance().getReference("User")
+            databaseReference.child("UserAccount").child(firebaseAuth.currentUser?.uid.toString()).setValue(null)
             firebaseAuth.currentUser?.delete()
             firebaseAuth.signOut()
             val intent = Intent(context, SignInActivity::class.java)
@@ -81,7 +85,7 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun observerData(){
+    private fun updateObserveData(){
         val emailObserver = Observer<String> {
             binding.text1.text = it.toString()
         }
@@ -107,15 +111,4 @@ class MyPageFragment : Fragment() {
         mainViewModel.date.observe(viewLifecycleOwner, dateObserver)
     }
 
-    private fun updataData(rechargeMoney: Int) {
-        var map = mutableMapOf<String, Any>()
-        map["money"] = rechargeMoney
-        databaseReference.child("UserAccount").child(firebaseAuth.currentUser?.uid.toString())
-            .updateChildren(map)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(context, "데이터 업데이트 성공", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
 }
