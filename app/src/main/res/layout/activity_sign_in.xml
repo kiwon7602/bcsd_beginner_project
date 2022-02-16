@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/lightYellow"
         tools:context=".view.view.SignInActivity">
 
         <LinearLayout
@@ -12,54 +14,63 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/lottery" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="복권 로그인 화면"
                 android:gravity="center"
-                android:textSize="30dp"/>
+                android:text="복권 로그인 화면"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/user_email"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:hint="아이디를 입력하시오."
                 android:layout_gravity="center"
-                android:inputType="textEmailAddress"/>
+                android:hint="아이디를 입력하시오."
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/user_password"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:hint="패스워드를 입력하시오."
                 android:layout_gravity="center"
-                android:inputType="textPassword"/>
+                android:hint="패스워드를 입력하시오."
+                android:inputType="textPassword" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/sign_in_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/black"
+                    android:layout_marginEnd="10dp"
+                    android:backgroundTint="@color/grey"
                     android:text="로그인"
-                    android:layout_marginEnd="10dp"/>
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/sign_up_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/black"
-                    android:text="회원가입"/>
+                    android:backgroundTint="@color/grey"
+                    android:text="회원가입"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
         </LinearLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

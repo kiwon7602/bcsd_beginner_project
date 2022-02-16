@@ -60,6 +60,7 @@ class SignUpActivity : AppCompatActivity() {
                         .setValue(userAccount)
 
                     Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                    firebaseAuth.signOut()
                     finish()
                 } else {
                     Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
