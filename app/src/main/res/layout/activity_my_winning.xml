@@ -8,40 +8,82 @@
         android:layout_height="match_parent"
         tools:context=".view.view.MyWinningActivity">
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="돌아가기"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/text_1"
+                android:id="@+id/text_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="로또 당첨 번호" />
+                android:layout_margin="5dp"
+                android:text="0000-00-00"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="나의 로또 번호" />
+                android:layout_margin="5dp"
+                android:text="로또 당첨 번호"
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_3"
+                android:id="@+id/text_lotteryNumbers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="당첨 지급액" />
+                android:text="로또 당첨 번호"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="나의 로또 번호"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_myLotteryNumbers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="나의 로또 번호"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/text_same_number_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="같은 번호 리스트"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/text_same_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="같은 번호 개수"
+                android:textSize="20dp" />
+
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_winning_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout"
+            tools:listitem="@layout/item_activity_my_winning" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
