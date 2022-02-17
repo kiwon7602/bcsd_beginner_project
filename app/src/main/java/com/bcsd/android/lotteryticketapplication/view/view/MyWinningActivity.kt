@@ -40,8 +40,8 @@ class MyWinningActivity : AppCompatActivity() {
 
             while (count != allList.size) {
                 count += 1
-                if ((count + 1) % 6 == 0) {
-                    val innerList = allList.slice((count - 5)..count) as MutableList<String>
+                if ((count + 1) % 7 == 0) {
+                    val innerList = allList.slice((count - 6)..count) as MutableList<String>
                     myrandnumberlist.add(innerList)
                 }
             }

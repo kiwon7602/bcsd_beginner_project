@@ -15,6 +15,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel : ViewModel() {
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://api2.ysmstudio.be/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    val service = retrofit.create(MainService::class.java)
+
     private lateinit var databaseReference: DatabaseReference
 
     val email = MutableLiveData<String>()
@@ -40,7 +46,7 @@ class MainViewModel : ViewModel() {
         lotteryNumbers.postValue(lotteryItems)
     }
 
-    fun updateMyLotteryNumbers(myLotteryList: MutableList<MutableList<String>>){
+    fun updateMyLotteryNumbers(myLotteryList: MutableList<MutableList<String>>) {
         myLotteryItems.clear()
         myLotteryItems.addAll(myLotteryList)
         myLotteryNumbersList.postValue(myLotteryList)
@@ -51,14 +57,14 @@ class MainViewModel : ViewModel() {
         isRunning.postValue(isRunningItems)
     }
 
-    fun updateData(key:String, value:Any, context:Context){ // 데이터베이스 값 변경 업데이트
+    fun updateData(key: String, value: Any, context: Context) { // 데이터베이스 값 변경 업데이트
         val firebaseAuth = FirebaseAuth.getInstance()
-        var map = mutableMapOf<String,Any>()
+        var map = mutableMapOf<String, Any>()
         map[key] = value
         databaseReference.child("UserAccount").child(firebaseAuth.currentUser?.uid.toString())
             .updateChildren(map)
             .addOnCompleteListener {
-                if (it.isSuccessful){
+                if (it.isSuccessful) {
                     Toast.makeText(context, "데이터 업데이트 성공", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -93,11 +99,6 @@ class MainViewModel : ViewModel() {
     }
 
     fun createRetrofit() { // Retrofit2 http 통신
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api2.ysmstudio.be/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val service = retrofit.create(MainService::class.java)
         service.getLotteryNumber().enqueue(object : Callback<LotteryNumber> {
             override fun onResponse(call: Call<LotteryNumber>, response: Response<LotteryNumber>) {
                 if (response.isSuccessful) {
