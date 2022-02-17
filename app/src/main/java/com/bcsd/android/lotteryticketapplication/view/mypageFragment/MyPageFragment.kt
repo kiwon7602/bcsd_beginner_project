@@ -73,14 +73,15 @@ class MyPageFragment : Fragment() {
             activity?.finish()
         }
 
+        val isRunningObserver = Observer<ArrayList<Boolean>>{
+            if (false !in it){
+                binding.swipeRefresh.isRefreshing = false
+            }
+        }
+
         binding.swipeRefresh.setOnRefreshListener {
             mainViewModel.createRealtimeDatabase()
             mainViewModel.createRetrofit()
-            val isRunningObserver = Observer<ArrayList<Boolean>>{
-                if (false !in it){
-                    binding.swipeRefresh.isRefreshing = false
-                }
-            }
             mainViewModel.isRunning.observe(viewLifecycleOwner, isRunningObserver)
         }
     }
