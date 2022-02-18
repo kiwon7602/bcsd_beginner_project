@@ -89,4 +89,9 @@ class MainViewModel : ViewModel() {
             }
         })
     }
+
+    fun choiceNumber(todayNum: ArrayList<String>, userNum: ArrayList<String>){
+
+
+    }
 }

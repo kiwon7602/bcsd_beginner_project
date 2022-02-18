@@ -34,8 +34,8 @@
 
             <TextView
                 android:id="@+id/today_circle_ball_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="180dp"
                 android:background="@drawable/circle_purple"
@@ -47,8 +47,8 @@
 
             <TextView
                 android:id="@+id/today_circle_ball_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="125dp"
                 android:background="@drawable/circle_blue"
@@ -60,8 +60,8 @@
 
             <TextView
                 android:id="@+id/today_circle_ball_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="70dp"
                 android:background="@drawable/circle_green"
@@ -73,8 +73,8 @@
 
             <TextView
                 android:id="@+id/today_circle_ball_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/circle_red"
@@ -86,8 +86,8 @@
 
             <TextView
                 android:id="@+id/today_circle_ball_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="40dp"
                 android:layout_marginRight="20dp"
@@ -100,8 +100,8 @@
 
             <TextView
                 android:id="@+id/today_circle_ball_6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="95dp"
                 android:background="@drawable/circle_purple"
@@ -121,8 +121,8 @@
 
             <TextView
                 android:id="@+id/today_circle_ball_7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="175dp"
                 android:layout_marginRight="20dp"

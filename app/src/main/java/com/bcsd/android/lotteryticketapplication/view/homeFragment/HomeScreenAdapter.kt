@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bcsd.android.lotteryticketapplication.R
+import com.bcsd.android.lotteryticketapplication.view.model.TodayLotteryNumber
 
 class HomeScreenAdapter : RecyclerView.Adapter<HomeScreenViewHolder>() {
 
-    private val items = mutableListOf<HomeScreenViewHolder>()
+    private val items = mutableListOf<TodayLotteryNumber>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeScreenViewHolder {
         val view =
@@ -18,7 +19,9 @@ class HomeScreenAdapter : RecyclerView.Adapter<HomeScreenViewHolder>() {
 
 
     override fun onBindViewHolder(holder: HomeScreenViewHolder, position: Int) {
-        TODO("Not yet implemented")
+
+
+
     }
 
     override fun getItemCount(): Int {

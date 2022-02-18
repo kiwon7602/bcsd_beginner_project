@@ -28,7 +28,7 @@ class HomeScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding - DataBindingUtil.setContentView(
+        binding.DataBindingUtil.setContentView(
             this,
             R.layout.fragment_homescreen_main
         )

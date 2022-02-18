@@ -7,10 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bcsd.android.lotteryticketapplication.R
 import com.bcsd.android.lotteryticketapplication.databinding.FragmentHomescreenMainBinding
 import com.bcsd.android.lotteryticketapplication.view.model.TodayLotteryNumber
+import org.w3c.dom.Text
 
 class HomeScreenViewHolder(private val binding: FragmentHomescreenMainBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: homeS)
+    fun bind(data: TodayLotteryNumber){
+    }
+    var firstNumber: TextView = itemView.findViewById(R.id.)
+    var secendNumber: TextView = itemView.findViewById(R.id.)
 
     }
 /*

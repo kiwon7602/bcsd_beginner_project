@@ -27,72 +27,72 @@
 
             <TextView
                 android:id="@+id/past_circle_ball_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="180dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/circle_purple"
                 android:textColor="@color/white"
-                android:text="@{homeScreenMovingItem.todayBall1}"/>
+                android:text="@{homeScreenMovingItem.todayBalls[0]}"/>
 
             <TextView
                 android:id="@+id/past_circle_ball_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="125dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/circle_blue"
                 android:textColor="@color/white"
-                android:text="@{homeScreenMovingItem.todayBall2}"
+                android:text="@{homeScreenMovingItem.todayBalls[1]}"
                 />
 
 
             <TextView
                 android:id="@+id/past_circle_ball_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="70dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/circle_green"
                 android:textColor="@color/white"
-                android:text="@{homeScreenMovingItem.todayBall3}"/>
+                android:text="@{homeScreenMovingItem.todayBalls[2]}"/>
 
             <TextView
                 android:id="@+id/past_circle_ball_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/circle_red"
                 android:textColor="@color/black"
-                android:text="@{homeScreenMovingItem.todayBall4}"/>
+                android:text="@{homeScreenMovingItem.todayBalls[3]}"/>
 
             <TextView
                 android:id="@+id/past_circle_ball_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="40dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/circle_yellow"
                 android:textColor="@color/black"
-                android:text="@{homeScreenMovingItem.todayBall5}"/>
+                android:text="@{homeScreenMovingItem.todayBalls[4]}"/>
 
             <TextView
                 android:id="@+id/past_circle_ball_6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="95dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/circle_purple"
                 android:textColor="@color/black"
-                android:text="@{homeScreenMovingItem.todayBall6}"/>
+                android:text="@{homeScreenMovingItem.todayBalls[5]}"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -105,15 +105,15 @@
 
             <TextView
                 android:id="@+id/past_circle_ball_7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="175dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/circle_yellow"
                 android:textColor="@color/black"
-                android:text="@{homeScreenMovingItem.todayBall7}"/>
+                android:text="@{homeScreenMovingItem.todayBalls[6]}"/>
 
             <TextView
                 android:id="@+id/past_winner_number_text"
