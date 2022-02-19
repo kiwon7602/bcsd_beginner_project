@@ -24,6 +24,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+// 메인 액티비티 (홈, 구매, 마이페이지 프래그먼트를 가지고 있는 액티비티)
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
@@ -31,13 +32,17 @@ class MainActivity : AppCompatActivity() {
     private val homeScreenFragment = HomeScreenFragment()
     private val purchaseFragment = PurchaseFragment()
     private val manager = supportFragmentManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(MainViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        // retrofit2, database 데이터 불러올 때 progressbar 띄우기
         binding.progressBar.visibility = View.VISIBLE
 
+        // fragment 내 상태유지를 위해서 replace -> add 사용
         manager
             .beginTransaction()
             .add(R.id.main_frame, myPageFragment)
@@ -45,10 +50,12 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.main_frame, homeScreenFragment)
             .commit()
 
+        // bottom navigation
         createNavigation()
 
+        // retrofit2, database 데이터 관찰(observe)
         val isRunningObserver = Observer<ArrayList<Boolean>>{
-            if (false !in it){
+            if (false !in it){ // 두 개 데이터 관찰 중(retrofit2,database) false 가 없을 시 progressbar is gone
                 binding.progressBar.visibility = View.GONE
             }
         }
