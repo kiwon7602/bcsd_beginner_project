@@ -22,7 +22,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/today_lottery_balls"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="160dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:cardBackgroundColor="@color/common_google_signin_btn_text_dark_disabled"
@@ -139,8 +139,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginStart="10dp"
-                android:text="1등 당첨자 수:"
+                android:text="당첨금:"
                 android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/winner_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="25dp"
+                android:text="최고 등수:"
+                android:textSize="20dp" />
+
 
 
         </androidx.cardview.widget.CardView>

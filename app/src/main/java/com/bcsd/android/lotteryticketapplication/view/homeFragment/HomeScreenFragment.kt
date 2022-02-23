@@ -1,4 +1,4 @@
-package com.bcsd.android.lotteryticketapplication.view.view.homeFragment
+package com.bcsd.android.lotteryticketapplication.view.homeFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.bcsd.android.lotteryticketapplication.R
 import com.bcsd.android.lotteryticketapplication.databinding.FragmentHomescreenMainBinding
@@ -14,29 +13,29 @@ import com.bcsd.android.lotteryticketapplication.databinding.FragmentHomescreenM
 class HomeScreenFragment : Fragment() {
 
     private lateinit var binding: FragmentHomescreenMainBinding
+    private lateinit var fragmentHomeScreenAdapter: HomeScreenAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_homescreen_main, container, false)
+        binding = FragmentHomescreenMainBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.DataBindingUtil.setContentView(
-            this,
-            R.layout.fragment_homescreen_main
-        )
+    }
 
+    override fun onDestroyView() {//뷰 삭제
+        super.onDestroyView()
     }
 
 
-    private fun setNumberBackground(number: Int, textView: TextView) {
+    private fun setNumberBackground(number: Int, textView: TextView) {//숫자 크기에 따른 색변화
         when (number) {
             in 1..10 -> textView.background =
                 context?.let { ContextCompat.getDrawable(it, R.drawable.circle_yellow) }

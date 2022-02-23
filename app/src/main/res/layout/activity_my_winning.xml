@@ -26,6 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="200dp"
+                android:textSize="20dp"
                 android:text="로또 당첨 번호" />
 
             <TextView
@@ -33,6 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:textSize="20dp"
                 android:text="나의 로또 번호" />
 
             <TextView
@@ -40,6 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:textSize="20dp"
                 android:text="당첨 지급액" />
         </LinearLayout>
 

@@ -9,14 +9,10 @@ import com.bcsd.android.lotteryticketapplication.databinding.FragmentHomescreenM
 import com.bcsd.android.lotteryticketapplication.view.model.TodayLotteryNumber
 import org.w3c.dom.Text
 
-class HomeScreenViewHolder(private val binding: FragmentHomescreenMainBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(data: TodayLotteryNumber){
-    }
-    var firstNumber: TextView = itemView.findViewById(R.id.)
-    var secendNumber: TextView = itemView.findViewById(R.id.)
+class HomeScreenViewHolder(val binding: FragmentHomescreenMainBinding) :
+    RecyclerView.ViewHolder(binding.root)
 
-    }
+
 /*
     var pastBall1: TextView = itemView.findViewById(R.id.past_circle_ball_1)
     var pastBall2: TextView = itemView.findViewById(R.id.past_circle_ball_2)
