@@ -5,9 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -50,90 +48,19 @@ class HomeScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        todayWinningNumber()
-        pastWinningNumber()
+        getTodayWinningNumber()
+        getPastWinningNumber()
         getAllCurrentUserNumber()
         getAllPastUserNumber()
 
-        val getdate = Observer<String> {
-            homeScreenViewModel.currentUserData(it)
+        val currentDateObserver = Observer<String> {
+            homeScreenViewModel.setCurrentUserLotteryNumbers(it)
         }
-        mainViewModel.date.observe(viewLifecycleOwner, getdate)
+        mainViewModel.date.observe(viewLifecycleOwner, currentDateObserver)
     }
 
-    private fun pastWinningNumber() {
-        binding.pastVisibleButton.setOnClickListener {
-            var edittextdate = binding.editText.text.toString()
-            homeScreenViewModel.pastDateUserDataMatching(edittextdate, requireContext())
-            val pastdateObserver = Observer<String> {
-                binding.pastDate.text = it
-            }
-            homeScreenViewModel.pastdate.observe(viewLifecycleOwner, pastdateObserver)
-        }
-        val pastwinningnumbersObserver = Observer<MutableList<Int>> {
-            val it_list = it
-            it.forEach {
-                when (it_list.indexOf(it)) {
-                    0 -> binding.pastCircleBall1.text = it.toString()
-                    1 -> binding.pastCircleBall2.text = it.toString()
-                    2 -> binding.pastCircleBall3.text = it.toString()
-                    3 -> binding.pastCircleBall4.text = it.toString()
-                    4 -> binding.pastCircleBall5.text = it.toString()
-                    5 -> binding.pastCircleBall6.text = it.toString()
-                    6 -> binding.pastCircleBall7.text = it.toString()
-                }
-            }
-        }
-        homeScreenViewModel.pastwinningnumbers.observe(
-            viewLifecycleOwner,
-            pastwinningnumbersObserver
-        )
-    }
-
-    private fun getAllPastUserNumber() {
-        val pastlotterynumbers = Observer<String> {
-            var allusernumberlist = homeScreenViewModel.makeTwoDimensionalList(it)
-            adapter = HomeScreenAdapter(allusernumberlist)
-            binding.lotteryBallsRecyclerView.adapter = adapter
-            binding.lotteryBallsRecyclerView.layoutManager = LinearLayoutManager(view?.context)
-            adapter.setItemClickListener(object : HomeScreenAdapter.OnItemClickListener {
-                override fun onClick(v: View, position: Int, lottery: MutableList<Int>) {
-                    var count = 0
-                    val pastnumbers = Observer<MutableList<Int>> {
-                        count = 0
-                        lottery.forEach { number ->
-                            if (number in it) {
-                                count++
-                            }
-                        }
-                    }
-                    Toast.makeText(view?.context, "$count 개 일치!", Toast.LENGTH_SHORT).show()
-                    homeScreenViewModel.pastwinningnumbers.observe(viewLifecycleOwner, pastnumbers)
-
-                }
-            })
-        }
-        homeScreenViewModel.pastalluserlotterynumbers.observe(
-            viewLifecycleOwner,
-            pastlotterynumbers
-        )
-    }
-
-    private fun getAllCurrentUserNumber() {
-        val allUserNumberObserver = Observer<String> {
-            var allusernumberlist = homeScreenViewModel.makeTwoDimensionalList(it)
-            val winningNumbers = Observer<ArrayList<Int>> {
-                checkWinningRanking(allusernumberlist, it)
-            }
-            mainViewModel.lotteryNumbers.observe(viewLifecycleOwner, winningNumbers)
-        }
-        homeScreenViewModel.currentalluserlotterynumbers.observe(
-            viewLifecycleOwner,
-            allUserNumberObserver
-        )
-    }
-
-    private fun todayWinningNumber() {
+    // 오늘의 당첨 번호
+    private fun getTodayWinningNumber() {
         val lotteryNumbersObserver = Observer<ArrayList<Int>> {
             var todayWinningNumbers = it
             todayWinningNumbers.sort()
@@ -152,14 +79,85 @@ class HomeScreenFragment : Fragment() {
         mainViewModel.lotteryNumbers.observe(viewLifecycleOwner, lotteryNumbersObserver)
     }
 
+    // 과거 당첨 번호
+    private fun getPastWinningNumber() {
+        binding.pastVisibleButton.setOnClickListener {
+            var editTextDate = binding.editText.text.toString()
+            homeScreenViewModel.findPastLotteryNumbers(editTextDate, requireContext())
+            val pastDateObserver = Observer<String> {
+                binding.pastDate.text = it
+            }
+            homeScreenViewModel.pastDate.observe(viewLifecycleOwner, pastDateObserver)
+        }
+        val pastWinningNumbersObserver = Observer<MutableList<Int>> {
+            val listIt = it
+            it.forEach {
+                when (listIt.indexOf(it)) {
+                    0 -> binding.pastCircleBall1.text = it.toString()
+                    1 -> binding.pastCircleBall2.text = it.toString()
+                    2 -> binding.pastCircleBall3.text = it.toString()
+                    3 -> binding.pastCircleBall4.text = it.toString()
+                    4 -> binding.pastCircleBall5.text = it.toString()
+                    5 -> binding.pastCircleBall6.text = it.toString()
+                    6 -> binding.pastCircleBall7.text = it.toString()
+                }
+            }
+        }
+        homeScreenViewModel.pastWinningNumbers.observe(
+            viewLifecycleOwner,
+            pastWinningNumbersObserver
+        )
+    }
+
+    // 과거 회원들의 로또 번호 리사이클러 뷰
+    private fun getAllPastUserNumber() {
+        val pastLotteryNumbers = Observer<String> {
+            var allusernumberlist = mainViewModel.createTwoDimensionalList(it)
+            adapter = HomeScreenAdapter(allusernumberlist)
+            binding.lotteryBallsRecyclerView.adapter = adapter
+            binding.lotteryBallsRecyclerView.layoutManager = LinearLayoutManager(view?.context)
+            adapter.setItemClickListener(object : HomeScreenAdapter.OnItemClickListener {
+                override fun onClick(v: View, position: Int, lottery: MutableList<Int>) {
+                    var count = 0
+                    val pastWinningNumbers = homeScreenViewModel.pastWinningNumbers.value!!
+                    lottery.forEach { number ->
+                        if (number in pastWinningNumbers) {
+                            count++
+                        }
+                    }
+                    Toast.makeText(context, "$count 개 일치!", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+        homeScreenViewModel.pastAllUserLotteryNumbers.observe(
+            viewLifecycleOwner,
+            pastLotteryNumbers
+        )
+    }
+
+    // 모든 회원들의 로또 번호
+    private fun getAllCurrentUserNumber() {
+        val allUserNumberObserver = Observer<String> {
+            var allusernumberlist = mainViewModel.createTwoDimensionalList(it)
+            val winningNumbers = Observer<ArrayList<Int>> {
+                checkWinningRanking(allusernumberlist, it)
+            }
+            mainViewModel.lotteryNumbers.observe(viewLifecycleOwner, winningNumbers)
+        }
+        homeScreenViewModel.currentAllUserLotteryNumbers.observe(
+            viewLifecycleOwner,
+            allUserNumberObserver
+        )
+    }
+
+    // 오늘의 번호와 오늘의 회원 번호를 비교하여 n자리 수를 확인하는 함수
     private fun checkWinningRanking(
-        alluserlist: MutableList<MutableList<Int>>,
+        allUserList: MutableList<MutableList<Int>>,
         winningNumber: ArrayList<Int>
     ) {
         var winnerhistory = mutableListOf<Int>(0, 0, 0, 0, 0, 0, 0, 0)
-        var rankingcount = 0
-        alluserlist.forEach { listit ->
-            rankingcount = 0
+        allUserList.forEach { listit ->
+            var rankingcount = 0
             listit.forEach {
                 if (it in winningNumber)
                     rankingcount += 1
@@ -189,20 +187,4 @@ class HomeScreenFragment : Fragment() {
             }
         }
     }
-
-
-    private fun setNumberBackground(number: Int, textView: TextView) {
-        when (number) {
-            in 1..10 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_yellow) }
-            in 11..20 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_blue) }
-            in 21..30 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_red) }
-            in 31..40 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_purple) }
-        }
-        true
-    }
-
 }

@@ -2,6 +2,7 @@ package com.bcsd.android.lotteryticketapplication.view.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -32,17 +33,12 @@ class MyWinningActivity : AppCompatActivity() {
 
     // 나의 로또 번호 문자열을 2차원 리스트로 변경하는 함수
     private fun createMyLotteryNumbers(myLotteryNumbers: String): MutableList<MutableList<Int>> {
-        // 나의 로또 번호를 담을 변경 가능 한 리스트(정수형)
         var myrandnumberlist = mutableListOf<MutableList<Int>>()
-        // 로또 번호 개수를 7개까지이므로 제한 할 카운트 변수
         var count = 0
 
         if (myLotteryNumbers?.isNotEmpty() == true) {
-            // 나의 로또 번호를 정수형으로 저장 할 변경 가능 한 리스트
             var int_list = mutableListOf<Int>()
-            // split을 통해 나의 문자열 공백 자르고 mutablelist로 전환
             val str_list = myLotteryNumbers.split(" ") as MutableList<String>
-            // 마지막 공백 "" 삭제
             str_list.removeAt(str_list.size - 1)
             str_list.forEach {
                 int_list.add(it.toInt())
@@ -74,25 +70,19 @@ class MyWinningActivity : AppCompatActivity() {
         adapter.setItemClickListener(object : MyWinningAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int, lottery: MutableList<Int>) {
                 binding.textMyLotteryNumbers.text = lottery.toString()
-                // 클릭 시 해당 회원의 로또 번호를 저장하는 리스트
                 var viewLotteryNumbers = arrayListOf<Int>()
-                // 회원 로또 번호와 당첨 번호를 비교하여 같은 번호가 있을 시 저장 할 리스트
                 var count_list = arrayListOf<Int>()
 
-                // 회원의 로또 번호를 클릭 시 내부의 값을 viewLotteryNumbers 리스트에 저장
                 lottery.forEach {
                     viewLotteryNumbers.add(it)
                 }
 
-                // 당첨 번호 내에 나의 로또 번호를 저장 리스트와 비교하여 같은면 count_list에 저장
                 viewLotteryNumbers.forEach {
                     if (it in winningNumbers!!) {
                         count_list.add(it)
                     }
                 }
 
-                // count_list -> 당첨 번호와 같은 번호가 들어있는 리스트
-                // count_list.size -> 몇개의 번호가 일치하는지 확인하는 변수
                 binding.textSameNumberList.text = count_list.toString()
                 binding.textSameNumber.text = count_list.size.toString()
             }
