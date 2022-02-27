@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <item
             android:id="@+id/menu_home_screen"
-            android:title="@string/menu_home_screen_naming"
+            android:title="@string/home"
             android:icon="@drawable/ic_baseline_house_24"
             />
 
         <item
             android:id="@+id/menu_user_screen"
-            android:title="@string/menu_user_screen_naming"
+            android:title="@string/purchase"
             android:icon="@drawable/ic_baseline_account_circle_24"
             />
         <item
             android:id="@+id/menu_buy_lottery_ticket"
-            android:title="@string/menu_buy_lotterytickt_naming"
+            android:title="@string/myPage"
             android:icon="@drawable/ic_baseline_local_grocery_store_24"
 
             />

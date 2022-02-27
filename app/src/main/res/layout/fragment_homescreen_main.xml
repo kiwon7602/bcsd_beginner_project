@@ -261,20 +261,20 @@
             android:hint="날짜를 입력하시오."
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gidetext" />
-        <Button
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/past_visible_button"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp"
-            android:background="@drawable/screen_button_shape"
-            android:shadowColor="#A8A8A8"
-            android:shadowRadius="4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/screen_btin_custom_disgin"
+            android:shadowRadius="4"
             android:text="지난 당첨 번호 확인하기"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/edit_text" />
 
         <TextView
             android:id="@+id/past_date"

@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="복권 회원가입 화면"
+                android:text=" 회원가입 "
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="30dp" />

@@ -6,10 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/ball"
+        android:id="@+id/billboard"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/football"
+        android:src="@drawable/billboard"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -22,10 +22,11 @@
         android:elevation="10dp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@+id/ball"
-        app:layout_constraintStart_toStartOf="@+id/ball"
-        app:layout_constraintEnd_toEndOf="@+id/ball"
-        app:layout_constraintBottom_toBottomOf="@+id/ball"/>
+        android:layout_marginBottom="10dp"
+        app:layout_constraintTop_toTopOf="@+id/billboard"
+        app:layout_constraintStart_toStartOf="@+id/billboard"
+        app:layout_constraintEnd_toEndOf="@+id/billboard"
+        app:layout_constraintBottom_toBottomOf="@+id/billboard"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
