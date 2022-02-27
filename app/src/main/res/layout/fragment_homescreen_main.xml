@@ -251,6 +251,7 @@
             android:layout_height="wrap_content"
             android:text="지난 내역"
             android:textSize="25dp"
+            android:layout_marginTop="10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/today_lottery_balls" />
 
@@ -266,7 +267,7 @@
             android:id="@+id/past_visible_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/screen_btin_custom_disgin"
+            android:background="@drawable/btn_screen_custom_disgin"
             android:shadowRadius="4"
             android:text="지난 당첨 번호 확인하기"
             android:textColor="#FFFFFF"
