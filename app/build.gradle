@@ -50,10 +50,8 @@ dependencies {
 
     // Retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.6.4'
-    // Gson
+    // Retrofit2 Gson
     implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
     // Swiperefreshlayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    //CardView
-    implementation("androidx.cardview:cardview:1.0.0")
 }
