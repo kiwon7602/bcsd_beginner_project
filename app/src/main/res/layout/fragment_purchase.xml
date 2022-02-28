@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="로또랜덤"
-            android:background="@drawable/circle_purple"
+            android:background="@drawable/btn_fragment_purchase"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="5dp"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/circle_purple"
+            android:background="@drawable/btn_fragment_purchase"
             />
 
 
