@@ -3,5 +3,5 @@
     <item
         android:drawable="@drawable/money"
         android:width="50dp"
-        android:height="70dp"/>
+        android:height="50dp"/>
 </layer-list>
