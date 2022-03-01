@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,26 +13,26 @@
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:background="@color/white"
             android:elevation="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@color/white">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ProgressBar
-                android:layout_marginTop="300dp"
+                style="@android:style/Theme.Holo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@android:style/Theme.Holo"/>
+                android:layout_marginTop="300dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="로딩중"/>
+                android:text="로딩중" />
 
         </LinearLayout>
 
@@ -39,8 +40,8 @@
             android:id="@+id/main_frame"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/main_navigation"/>
+            app:layout_constraintBottom_toTopOf="@+id/main_navigation"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -48,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/bottomnavigation_main"/>
+            app:menu="@menu/bottomnavigation_main" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

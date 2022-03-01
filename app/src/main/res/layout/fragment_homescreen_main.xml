@@ -16,7 +16,7 @@
             android:textSize="25dp"
             app:layout_constraintBottom_toTopOf="@id/today_lottery_balls"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent " />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/today_lottery_balls"
@@ -249,9 +249,9 @@
             android:id="@+id/gidetext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10"
             android:text="지난 내역"
             android:textSize="25dp"
-            android:layout_marginTop="10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/today_lottery_balls" />
 
