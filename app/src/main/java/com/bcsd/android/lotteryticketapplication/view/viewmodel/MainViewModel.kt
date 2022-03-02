@@ -23,19 +23,26 @@ class MainViewModel : ViewModel() {
 
     private lateinit var databaseReference: DatabaseReference
 
-    val email = MutableLiveData<String>() // 유저 이메일
-    val name = MutableLiveData<String>() // 유저 이름
-    val money = MutableLiveData<Int>() // 유저 예치금
-    val myLotteryNumbers = MutableLiveData<String>() // 유저 로또 번호 문자열 (숫자 사이 공백, 데이터베이스 저장 시)
-    val myLotteryNumbersList = MutableLiveData<MutableList<MutableList<Int>>>() // 유저 로또 번호 2차원 리스트(정수형)
-    val lotteryNumbers = MutableLiveData<ArrayList<Int>>() // 당첨 번호
-    val date = MutableLiveData<String>() // 당첨 날짜
+    val email = MutableLiveData<String>()
+    val name = MutableLiveData<String>()
+    val money = MutableLiveData<Int>()
+    val date = MutableLiveData<String>()
+    val myLotteryNumbersStr = MutableLiveData<String>()
+    val myLotteryNumbers = MutableLiveData<MutableList<MutableList<Int>>>()
+    val lotteryNumbers = MutableLiveData<ArrayList<Int>>()
+
     // retrofit2, database 데이터 받아올 때, 크기 2인 boolean(false, true) 타입 리스트
     val isRunning = MutableLiveData<ArrayList<Boolean>>()
 
-    val lotteryItems = ArrayList<Int>() // 당첨 번호를 담고 있을 리스트
-    val myLotteryItems = mutableListOf<MutableList<Int>>() // 유저 로또 번호를 담을 2차원 리스트(정수형)
-    val isRunningItems: ArrayList<Boolean> = arrayListOf(false, false) // isRunning 라이브 데이터를 대신 할 리스트
+    val lotteryItems = ArrayList<Int>()
+    val myLotteryItems = mutableListOf<MutableList<Int>>()
+    val isRunningItems: ArrayList<Boolean> = arrayListOf(false, false)
+
+    // 나의 당첨 번호 삭제
+    fun deleteMyLotteryNumbers(){
+        myLotteryItems.clear()
+        myLotteryNumbers.postValue(myLotteryItems)
+    }
 
     // 당첨 번호 업데이트 함수 ( http 통신 완료 후 받아온 데이터(당첨 번호) )
     fun updateLotteryNumbers(lotteryList: ArrayList<Int>) {
@@ -45,13 +52,41 @@ class MainViewModel : ViewModel() {
         lotteryNumbers.postValue(lotteryItems)
     }
 
+    // 회원 별 로또 번호 업데이트 함수
     fun updateMyLotteryNumbers(myLotteryList: MutableList<MutableList<Int>>) {
         myLotteryItems.clear()
         myLotteryItems.addAll(myLotteryList)
-        myLotteryNumbersList.postValue(myLotteryList)
+        myLotteryNumbers.postValue(myLotteryItems)
     }
 
-    fun updateIsRunning(index: Int, value: Boolean) { // 서버와 리얼타임데이터베이스 호출 완료 시 값 변경 함수
+    // 해당날짜의 회원이 구매한 로또를 모두 모아 데이터베이스에 저장
+    fun updateCurrentTimeLotteryNumbers(randomNumberStr:String){
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.child("LotteryNumbers")
+                    .child(date.value.toString())
+                if (value.child("customer").exists()) {
+                    var newStr = value.child("customer").value.toString()
+                    newStr += randomNumberStr
+                    databaseReference.child("LotteryNumbers")
+                        .child(date.value.toString())
+                        .child("customer")
+                        .setValue(newStr)
+                } else {
+                    databaseReference.child("LotteryNumbers")
+                        .child(date.value.toString())
+                        .child("customer")
+                        .setValue(randomNumberStr)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    // 서버와 리얼타임데이터베이스 호출 완료 시 값 변경 함수
+    fun updateIsRunning(index: Int, value: Boolean) {
         isRunningItems.set(index, value)
         isRunning.postValue(isRunningItems)
     }
@@ -72,7 +107,44 @@ class MainViewModel : ViewModel() {
             }
     }
 
-    fun createRealtimeDatabase() { // 파이어베이스 리얼타임데이터베이스 연동
+    // 7개의 번호를 랜덤으로 생성하는 함수
+    fun createRandomNumber():MutableSet<Int>{
+        var randomSet = mutableSetOf<Int>()
+        while (randomSet.size <= 6) {
+            randomSet.add((1..45).random())
+        }
+        return randomSet
+    }
+
+    // 문자열을 받아 2차원 리스트로 변경하는 함수
+    fun createTwoDimensionalList(number: String): MutableList<MutableList<Int>> {
+        var count = 0
+        var numberList = mutableListOf<MutableList<Int>>()
+        if (number != ""){
+            var listInt = mutableListOf<Int>()
+            var listIt = number.split(" ") as MutableList<String>
+            listIt.removeAt(listIt.size - 1)
+            listIt.forEach {
+                listInt.add(it.toInt())
+            }
+
+            while (count != listInt.size) {
+                count += 1 // count 1씩 증가
+                if ((count + 1) % 7 == 0) { // count(6,13...) + 1 => 7의 배수일 때
+                    val innerList = listInt.slice((count - 6)..count)
+                    numberList.add(innerList as MutableList<Int>)
+                }
+            }
+            for (i in 0..numberList.size - 1) {
+                numberList[i].sort()
+            }
+        }
+        return numberList
+    }
+
+
+    // 파이어베이스 리얼타임데이터베이스 연동
+    fun createRealtimeDatabase() {
         // databaseReference -> User 경로 참조
         databaseReference = FirebaseDatabase.getInstance().getReference("User")
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -93,7 +165,7 @@ class MainViewModel : ViewModel() {
                         money.postValue(userValue.value.toString().toInt())
                     }
                     if (userValue.key == "userLotteryNumbers") {
-                        myLotteryNumbers.postValue(userValue.value.toString())
+                        myLotteryNumbersStr.postValue(userValue.value.toString())
                     }
                 }
             }
@@ -103,7 +175,7 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    fun createRetrofit() { // Retrofit2 http 통신
+    fun createRetrofit() {
         service.getLotteryNumber().enqueue(object : Callback<LotteryNumber> {
             override fun onResponse(call: Call<LotteryNumber>, response: Response<LotteryNumber>) {
                 if (response.isSuccessful) { // 통신 성공 시
