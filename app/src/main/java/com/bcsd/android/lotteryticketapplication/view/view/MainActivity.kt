@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bcsd.android.lotteryticketapplication.R
 import com.bcsd.android.lotteryticketapplication.databinding.ActivityMainBinding
@@ -31,25 +30,13 @@ class MainActivity : AppCompatActivity() {
         // retrofit2, database 데이터 불러올 때 progressbar 띄우기
         binding.progressBar.visibility = View.VISIBLE
 
+
         manager
             .beginTransaction()
             .replace(R.id.main_frame, homeScreenFragment)
             .commit()
-
-        // bottom navigation
-        createBottomNavigation()
-
-        // retrofit2, database 데이터 관찰
-        val isRunningObserver = Observer<ArrayList<Boolean>> {
-            if (false !in it) {
-                binding.progressBar.visibility = View.GONE
-            }
-        }
-        mainViewModel.isRunning.observe(this, isRunningObserver)
-
-        mainViewModel.createRealtimeDatabase()
-        mainViewModel.createRetrofit()
     }
+
 
     private fun createBottomNavigation() {
         val navigation = binding.mainNavigation

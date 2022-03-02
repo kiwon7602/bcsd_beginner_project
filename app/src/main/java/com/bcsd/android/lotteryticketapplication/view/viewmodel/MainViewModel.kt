@@ -175,7 +175,6 @@ class MainViewModel : ViewModel() {
         })
     }
 
-    // Retrofit2 http 통신
     fun createRetrofit() {
         service.getLotteryNumber().enqueue(object : Callback<LotteryNumber> {
             override fun onResponse(call: Call<LotteryNumber>, response: Response<LotteryNumber>) {
@@ -200,7 +199,6 @@ class MainViewModel : ViewModel() {
                         .setValue(date_lotterynumbers)
                 }
             }
-
             // 통신 실패 시
             override fun onFailure(call: Call<LotteryNumber>, t: Throwable) {
             }

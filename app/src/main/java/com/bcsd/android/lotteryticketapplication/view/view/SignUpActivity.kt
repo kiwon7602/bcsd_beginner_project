@@ -67,7 +67,8 @@ class SignUpActivity : AppCompatActivity() {
                         name = name,
                         0,
                         ""
-                    )
+                        )
+
 
                     // Firebase RealtimeDatabase 에 User 별 데이터 저장
                     databaseReference.child("UserAccount").child(firebaseUser?.uid.toString())
