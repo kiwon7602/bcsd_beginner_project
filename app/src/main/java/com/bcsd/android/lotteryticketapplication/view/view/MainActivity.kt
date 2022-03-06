@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bcsd.android.lotteryticketapplication.R
 import com.bcsd.android.lotteryticketapplication.databinding.ActivityMainBinding
 import com.bcsd.android.lotteryticketapplication.view.view.homeFragment.HomeScreenFragment
-import com.bcsd.android.lotteryticketapplication.view.mypageFragment.MyPageFragment
+import com.bcsd.android.lotteryticketapplication.view.view.mypageFragment.MyPageFragment
 import com.bcsd.android.lotteryticketapplication.view.view.purchaseFragment.PurchaseFragment
 import com.bcsd.android.lotteryticketapplication.view.viewmodel.MainViewModel
 
