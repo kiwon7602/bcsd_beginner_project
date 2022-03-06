@@ -1,13 +1,10 @@
 package com.bcsd.android.lotteryticketapplication.view.view.homeFragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,7 +24,6 @@ class HomeScreenFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var mainViewModel: MainViewModel
     private lateinit var homeScreenViewModel: HomeScreenViewModel
-
     private lateinit var adapter: HomeScreenAdapter
 
     override fun onCreateView(
@@ -55,25 +51,25 @@ class HomeScreenFragment : Fragment() {
         getAllCurrentUserNumber()
         getAllPastUserNumber()
 
-        val getdate = Observer<String> {
+        val getDate = Observer<String> {
             homeScreenViewModel.currentUserData(it)
         }
-        mainViewModel.date.observe(viewLifecycleOwner, getdate)
+        mainViewModel.date.observe(viewLifecycleOwner, getDate)
     }
 
     private fun pastWinningNumber() {
         binding.pastVisibleButton.setOnClickListener {
-            var edittextdate = binding.editText.text.toString()
-            homeScreenViewModel.pastDateUserDataMatching(edittextdate, requireContext())
-            val pastdateObserver = Observer<String> {
-                binding.pastDate.text = it
+            val editTextDate = binding.getDataEditText.text.toString()
+            homeScreenViewModel.pastDateUserDataMatching(editTextDate, requireContext())
+            val pastDateObserver = Observer<String> {
+                binding.pastDateText.text = it
             }
-            homeScreenViewModel.pastdate.observe(viewLifecycleOwner, pastdateObserver)
+            homeScreenViewModel.pastDate.observe(viewLifecycleOwner, pastDateObserver)
         }
-        val pastwinningnumbersObserver = Observer<MutableList<Int>> {
-            val it_list = it
-            it.forEach {
-                when (it_list.indexOf(it)) {
+
+        val pastWinningNumbersObserver = Observer<MutableList<Int>> { winningNumbers ->
+            winningNumbers.forEach {
+                when (winningNumbers.indexOf(it)) {
                     0 -> binding.pastCircleBall1.text = it.toString()
                     1 -> binding.pastCircleBall2.text = it.toString()
                     2 -> binding.pastCircleBall3.text = it.toString()
@@ -84,22 +80,22 @@ class HomeScreenFragment : Fragment() {
                 }
             }
         }
-        homeScreenViewModel.pastwinningnumbers.observe(
+        homeScreenViewModel.pastWinningNumbers.observe(
             viewLifecycleOwner,
-            pastwinningnumbersObserver
+            pastWinningNumbersObserver
         )
     }
 
     private fun getAllPastUserNumber() {
-        val pastlotterynumbers = Observer<String> {
-            var allusernumberlist = homeScreenViewModel.makeTwoDimensionalList(it)
-            adapter = HomeScreenAdapter(allusernumberlist)
+        val pastLotteryNumbers = Observer<String> {
+            val allUserNumberList = homeScreenViewModel.makeTwoDimensionalList(it)
+            adapter = HomeScreenAdapter(allUserNumberList)
             binding.lotteryBallsRecyclerView.adapter = adapter
             binding.lotteryBallsRecyclerView.layoutManager = LinearLayoutManager(view?.context)
             adapter.setItemClickListener(object : HomeScreenAdapter.OnItemClickListener {
-                override fun onClick(v: View, position: Int, lottery: MutableList<Int>) {
+                override fun onClick(v: View, position: Int, lottery: List<Int>) {
                     var count = 0
-                    val pastnumbers = Observer<MutableList<Int>> {
+                    val pastNumbers = Observer<MutableList<Int>> {
                         count = 0
                         lottery.forEach { number ->
                             if (number in it) {
@@ -107,45 +103,45 @@ class HomeScreenFragment : Fragment() {
                             }
                         }
                     }
-                    Toast.makeText(view?.context, "$count 개 일치!", Toast.LENGTH_SHORT).show()
-                    homeScreenViewModel.pastwinningnumbers.observe(viewLifecycleOwner, pastnumbers)
+                    Toast.makeText(requireContext(), "$count 개 일치!", Toast.LENGTH_SHORT).show()
+                    homeScreenViewModel.pastWinningNumbers.observe(viewLifecycleOwner, pastNumbers)
 
                 }
             })
         }
-        homeScreenViewModel.pastalluserlotterynumbers.observe(
+        homeScreenViewModel.pastAllUserLotteryNumbers.observe(
             viewLifecycleOwner,
-            pastlotterynumbers
+            pastLotteryNumbers
         )
     }
 
     private fun getAllCurrentUserNumber() {
         val allUserNumberObserver = Observer<String> {
-            var allusernumberlist = homeScreenViewModel.makeTwoDimensionalList(it)
+            val allUserNumberList = homeScreenViewModel.makeTwoDimensionalList(it)
             val winningNumbers = Observer<ArrayList<Int>> {
-                checkWinningRanking(allusernumberlist, it)
+                checkWinningRanking(allUserNumberList, it)
             }
             mainViewModel.lotteryNumbers.observe(viewLifecycleOwner, winningNumbers)
         }
-        homeScreenViewModel.currentalluserlotterynumbers.observe(
+        homeScreenViewModel.currentAllUserLotteryNumbers.observe(
             viewLifecycleOwner,
             allUserNumberObserver
         )
     }
 
     private fun todayWinningNumber() {
-        val lotteryNumbersObserver = Observer<ArrayList<Int>> {
-            var todayWinningNumbers = it
+        val lotteryNumbersObserver = Observer<MutableList<Int>> { winningNumbers ->
+            var todayWinningNumbers = winningNumbers
             todayWinningNumbers.sort()
-            todayWinningNumbers.forEach {
-                when (todayWinningNumbers.indexOf(it)) {
-                    0 -> binding.todayCircleBall1.text = it.toString()
-                    1 -> binding.todayCircleBall2.text = it.toString()
-                    2 -> binding.todayCircleBall3.text = it.toString()
-                    3 -> binding.todayCircleBall4.text = it.toString()
-                    4 -> binding.todayCircleBall5.text = it.toString()
-                    5 -> binding.todayCircleBall6.text = it.toString()
-                    6 -> binding.todayCircleBall7.text = it.toString()
+            todayWinningNumbers.forEach { winningNumbers ->
+                when (todayWinningNumbers.indexOf(winningNumbers)) {
+                    0 -> binding.todayCircleBall1.text = winningNumbers.toString()
+                    1 -> binding.todayCircleBall2.text = winningNumbers.toString()
+                    2 -> binding.todayCircleBall3.text = winningNumbers.toString()
+                    3 -> binding.todayCircleBall4.text = winningNumbers.toString()
+                    4 -> binding.todayCircleBall5.text = winningNumbers.toString()
+                    5 -> binding.todayCircleBall6.text = winningNumbers.toString()
+                    6 -> binding.todayCircleBall7.text = winningNumbers.toString()
                 }
             }
         }
@@ -153,31 +149,31 @@ class HomeScreenFragment : Fragment() {
     }
 
     private fun checkWinningRanking(
-        alluserlist: MutableList<MutableList<Int>>,
+        allUserList: List<MutableList<Int>>,
         winningNumber: ArrayList<Int>
     ) {
-        var winnerhistory = mutableListOf<Int>(0, 0, 0, 0, 0, 0, 0, 0)
-        var rankingcount = 0
-        alluserlist.forEach { listit ->
-            rankingcount = 0
-            listit.forEach {
+        val winnerHistory = mutableListOf<Int>(0, 0, 0, 0, 0, 0, 0, 0)
+        var rankingCount = 0
+        allUserList.forEach { list_it ->
+            rankingCount = 0
+            list_it.forEach {
                 if (it in winningNumber)
-                    rankingcount += 1
+                    rankingCount += 1
             }
-            when (rankingcount) {
-                0 -> winnerhistory[0] += 1
-                1 -> winnerhistory[1] += 1
-                2 -> winnerhistory[2] += 1
-                3 -> winnerhistory[3] += 1
-                4 -> winnerhistory[4] += 1
-                5 -> winnerhistory[5] += 1
-                6 -> winnerhistory[6] += 1
-                7 -> winnerhistory[7] += 1
+            when (rankingCount) {
+                0 -> winnerHistory[0] += 1
+                1 -> winnerHistory[1] += 1
+                2 -> winnerHistory[2] += 1
+                3 -> winnerHistory[3] += 1
+                4 -> winnerHistory[4] += 1
+                5 -> winnerHistory[5] += 1
+                6 -> winnerHistory[6] += 1
+                7 -> winnerHistory[7] += 1
             }
         }
-        winnerhistory.forEach {
-            var _index = winnerhistory.indexOf(it)
-            when (_index) {
+        winnerHistory.forEach {
+            var historyIndex = winnerHistory.indexOf(it)
+            when (historyIndex) {
                 0 -> binding.currentNum0.text = it.toString()
                 1 -> binding.currentNum1.text = it.toString()
                 2 -> binding.currentNum2.text = it.toString()
@@ -188,21 +184,6 @@ class HomeScreenFragment : Fragment() {
                 7 -> binding.currentNum7.text = it.toString()
             }
         }
-    }
-
-
-    private fun setNumberBackground(number: Int, textView: TextView) {
-        when (number) {
-            in 1..10 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_yellow) }
-            in 11..20 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_blue) }
-            in 21..30 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_red) }
-            in 31..40 -> textView.background =
-                context?.let { ContextCompat.getDrawable(it, R.drawable.circle_purple) }
-        }
-        true
     }
 
 }

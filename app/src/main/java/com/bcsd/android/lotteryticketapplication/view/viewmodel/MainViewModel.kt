@@ -15,29 +15,39 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel : ViewModel() {
-    val retrofit = Retrofit.Builder()
+    private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://api2.ysmstudio.be/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    val service = retrofit.create(MainService::class.java)
+    private val service: MainService = retrofit.create(MainService::class.java)
 
     private lateinit var databaseReference: DatabaseReference
 
-    val email = MutableLiveData<String>() // 유저 이메일
-    val name = MutableLiveData<String>() // 유저 이름
-    val money = MutableLiveData<Int>() // 유저 예치금
-    val myLotteryNumbers = MutableLiveData<String>() // 유저 로또 번호 문자열 (숫자 사이 공백, 데이터베이스 저장 시)
+    private val _email = MutableLiveData<String>() // 유저 이메일
+    val email = _email
+
+    private val _name = MutableLiveData<String>() // 유저 이름
+    val name = _name
+
+    private val _money = MutableLiveData<Int>() // 유저 예치금
+    val money = _money
+
+    private val _myLotteryNumbers =
+        MutableLiveData<String>() // 유저 로또 번호 문자열 (숫자 사이 공백, 데이터베이스 저장 시)
+    val myLotteryNumbers = _myLotteryNumbers
+
     val myLotteryNumbersList =
         MutableLiveData<MutableList<MutableList<Int>>>() // 유저 로또 번호 2차원 리스트(정수형)
+
     val lotteryNumbers = MutableLiveData<ArrayList<Int>>() // 당첨 번호
     val date = MutableLiveData<String>() // 당첨 날짜
 
     // retrofit2, database 데이터 받아올 때, 크기 2인 boolean(false, true) 타입 리스트
     val isRunning = MutableLiveData<ArrayList<Boolean>>()
 
-    val lotteryItems = ArrayList<Int>() // 당첨 번호를 담고 있을 리스트
-    val myLotteryItems = mutableListOf<MutableList<Int>>() // 유저 로또 번호를 담을 2차원 리스트(정수형)
-    val isRunningItems: ArrayList<Boolean> =
+    private val lotteryItems = ArrayList<Int>() // 당첨 번호를 담고 있을 리스트
+    private val myLotteryItems = mutableListOf<MutableList<Int>>() // 유저 로또 번호를 담을 2차원 리스트(정수형)
+    private val isRunningItems: ArrayList<Boolean> =
         arrayListOf(false, false) // isRunning 라이브 데이터를 대신 할 리스트
 
     // 당첨 번호 업데이트 함수 ( http 통신 완료 후 받아온 데이터(당첨 번호) )

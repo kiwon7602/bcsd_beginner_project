@@ -11,20 +11,3 @@ import org.w3c.dom.Text
 
 class HomeScreenViewHolder(val binding: FragmentHomescreenMainBinding) :
     RecyclerView.ViewHolder(binding.root)
-
-
-/*
-    var pastBall1: TextView = itemView.findViewById(R.id.past_circle_ball_1)
-    var pastBall2: TextView = itemView.findViewById(R.id.past_circle_ball_2)
-    var pastBall3: TextView = itemView.findViewById(R.id.past_circle_ball_3)
-    var pastBall4: TextView = itemView.findViewById(R.id.past_circle_ball_4)
-    var pastBall5: TextView = itemView.findViewById(R.id.past_circle_ball_5)
-    var pastBall6: TextView = itemView.findViewById(R.id.past_circle_ball_6)
-    var pastBall7: TextView = itemView.findViewById(R.id.past_circle_ball_7)
-    var pastWinnerRank: TextView =itemView.findViewById(R.id.past_winner_rank_text)
-    var pastWinnerNumber: TextView =itemView.findViewById(R.id.past_winner_number_text)
-    var pastWinnerMoney: TextView = itemView.findViewById(R.id.past_winner_money_text)
-
-}
-
- */

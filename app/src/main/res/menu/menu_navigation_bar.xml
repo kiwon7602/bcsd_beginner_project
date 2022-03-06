@@ -13,7 +13,7 @@
             />
         <item
             android:id="@+id/menu_buy_lottery_ticket"
-            android:title="@string/myPage"
+            android:title="@string/my_page"
             android:icon="@drawable/ic_baseline_local_grocery_store_24"
 
             />
