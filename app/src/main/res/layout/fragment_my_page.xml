@@ -35,7 +35,7 @@
                     android:src="@drawable/ic_baseline_person_pin_24" />
 
                 <TextView
-                    android:id="@+id/pvt_name"
+                    android:id="@+id/show_name_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -46,7 +46,7 @@
                     android:textSize="30dp" />
 
                 <TextView
-                    android:id="@+id/pvt_email"
+                    android:id="@+id/show_email_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -56,7 +56,7 @@
                     android:textSize="16dp" />
 
                 <TextView
-                    android:id="@+id/pvt_money"
+                    android:id="@+id/show_money_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -69,42 +69,42 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/function_charge_card_view"
                 android:layout_width="384dp"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:layout_marginTop="40dp"
+                android:background="?attr/selectableItemBackground"
                 android:foregroundGravity="center"
                 android:orientation="horizontal"
                 app:cardBackgroundColor="@color/design_default_color_surface"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_data_card_view">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="130dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="40dp"
                     android:text="예치금 충전하기"
                     android:textSize="30dp"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/recharge_money"
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="20dp"
-                    android:backgroundTint="#00ff0000"
-                    android:drawableBottom="@drawable/size_money" />
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="130dp"
+                    android:background="@null"
+                    android:src="@drawable/size_money" />
 
 
             </androidx.cardview.widget.CardView>
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/function_check_card_view"
+                android:id="@+id/function_check_winning_card_view"
                 android:layout_width="384dp"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:layout_marginTop="40dp"
                 android:foregroundGravity="center"
                 android:orientation="horizontal"
@@ -115,21 +115,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/function_charge_card_view">
 
-                <Button
-                    android:id="@+id/check_winning"
-                    android:layout_width="wrap_content"
-                    android:layout_height="78dp"
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
                     android:layout_marginStart="20dp"
+                    android:layout_marginEnd="150dp"
                     android:backgroundTint="@color/white"
-                    android:drawableBottom="@drawable/size_winning" />
+                    android:src="@drawable/size_winning" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="115dp"
-                    android:layout_marginTop="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="50dp"
                     android:text="나의 당첨 내역 확인하기"
-                    android:textSize="25dp"
+                    android:textSize="26dp"
                     android:textStyle="bold" />
 
             </androidx.cardview.widget.CardView>
@@ -143,7 +144,7 @@
                 android:text="로그아웃"
                 app:layout_constraintEnd_toStartOf="@id/delete_account_button"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/function_check_card_view" />
+                app:layout_constraintTop_toBottomOf="@id/function_check_winning_card_view" />
 
             <Button
                 android:id="@+id/delete_account_button"
@@ -154,7 +155,7 @@
                 android:text="회원탈퇴"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/sign_out_button"
-                app:layout_constraintTop_toBottomOf="@id/function_check_card_view" />
+                app:layout_constraintTop_toBottomOf="@id/function_check_winning_card_view" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

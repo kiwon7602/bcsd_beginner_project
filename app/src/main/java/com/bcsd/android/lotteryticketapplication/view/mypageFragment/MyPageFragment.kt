@@ -1,4 +1,4 @@
-package com.bcsd.android.lotteryticketapplication.view.view.mypageFragment
+package com.bcsd.android.lotteryticketapplication.view.mypageFragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -46,7 +46,7 @@ class MyPageFragment : Fragment() {
         updateObserveData()
 
         // 예치금 충전 버튼 클릭 시 이벤트
-        binding.rechargeMoney.setOnClickListener {
+        binding.functionChargeCardView.setOnClickListener {
             // 클릭 시 추가 돈 5000원
             rechargeMoney += 5000
             // viewModel 변경 된 money 값 저장
@@ -56,7 +56,7 @@ class MyPageFragment : Fragment() {
         }
 
         // 나의 당첨 내역 확인 버튼 클릭 시 이벤트 (마이페이지 -> 나의 당첨 내역 확인 액티비티)
-        binding.checkWinning.setOnClickListener {
+        binding.functionCheckWinningCardView.setOnClickListener {
             val intent = Intent(context, MyWinningActivity::class.java)
             // 값 이동 : 당첨 번호, 당첨 날짜, 나의 당첨 번호
             intent.putExtra("winningNumbers", winningNumbers)
@@ -107,13 +107,13 @@ class MyPageFragment : Fragment() {
     // viewModel 관찰(observer) 하는 함수
     private fun updateObserveData() {
         val emailObserver = Observer<String> {
-            binding.pvtEmail.text = it.toString()
+            binding.showEmailTextView.text = it.toString()
         }
         val nameObserver = Observer<String> {
-            binding.pvtName.text = it.toString()
+            binding.showNameTextView.text = it.toString()
         }
         val moneyObserver = Observer<Int> {
-            binding.pvtMoney.text = it.toString()
+            binding.showMoneyTextView.text = it.toString()
             // 유저의 돈 변동을 위해서 계속 관찰 (돈 충전 관련), rechargeMoney 변수로 사용
             rechargeMoney = it
         }

@@ -246,22 +246,22 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/gidetext"
+            android:id="@+id/gide_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10"
+            android:layout_marginTop="10dp"
             android:text="지난 내역"
             android:textSize="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/today_lottery_balls" />
 
         <EditText
-            android:id="@+id/edit_text"
+            android:id="@+id/get_data_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="날짜를 입력하시오."
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gidetext" />
+            app:layout_constraintTop_toBottomOf="@id/gide_text" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/past_visible_button"
@@ -275,10 +275,10 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/get_data_edit_text" />
 
         <TextView
-            android:id="@+id/past_date"
+            android:id="@+id/past_date_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -296,7 +296,7 @@
             app:cardBackgroundColor="@color/common_google_signin_btn_text_dark_disabled"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/past_date">
+            app:layout_constraintTop_toBottomOf="@id/past_date_text">
 
             <TextView
                 android:id="@+id/past_circle_ball_1"
