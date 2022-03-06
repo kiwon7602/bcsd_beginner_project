@@ -49,6 +49,11 @@ class MainViewModel : ViewModel() {
     private val myLotteryItems = mutableListOf<MutableList<Int>>() // 유저 로또 번호를 담을 2차원 리스트(정수형)
     private val isRunningItems: ArrayList<Boolean> =
         arrayListOf(false, false) // isRunning 라이브 데이터를 대신 할 리스트
+    // 나의 당첨 번호 삭제
+    fun deleteMyLotteryNumbers(){
+        myLotteryItems.clear()
+    }
+        myLotteryNumbers.postValue(myLotteryItems)
 
     // 당첨 번호 업데이트 함수 ( http 통신 완료 후 받아온 데이터(당첨 번호) )
     fun updateLotteryNumbers(lotteryList: ArrayList<Int>) {
@@ -62,7 +67,33 @@ class MainViewModel : ViewModel() {
     fun updateMyLotteryNumbers(myLotteryList: MutableList<MutableList<Int>>) {
         myLotteryItems.clear()
         myLotteryItems.addAll(myLotteryList)
-        myLotteryNumbersList.postValue(myLotteryItems)
+        myLotteryNumbers.postValue(myLotteryItems)
+    }
+
+    // 해당날짜의 회원이 구매한 로또를 모두 모아 데이터베이스에 저장
+    fun updateCurrentTimeLotteryNumbers(randomNumberStr:String){
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.child("LotteryNumbers")
+                    .child(date.value.toString())
+                if (value.child("customer").exists()) {
+                    var newStr = value.child("customer").value.toString()
+                    newStr += randomNumberStr
+                    databaseReference.child("LotteryNumbers")
+                        .child(date.value.toString())
+                        .child("customer")
+                        .setValue(newStr)
+                } else {
+                    databaseReference.child("LotteryNumbers")
+                        .child(date.value.toString())
+                        .child("customer")
+                        .setValue(randomNumberStr)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
     // 서버와 리얼타임데이터베이스 호출 완료 시 값 변경 함수
@@ -86,6 +117,42 @@ class MainViewModel : ViewModel() {
                 }
             }
     }
+
+    // 7개의 번호를 랜덤으로 생성하는 함수
+    fun createRandomNumber():MutableSet<Int>{
+        var randomSet = mutableSetOf<Int>()
+        while (randomSet.size <= 6) {
+            randomSet.add((1..45).random())
+        }
+        return randomSet
+    }
+
+    // 문자열을 받아 2차원 리스트로 변경하는 함수
+    fun createTwoDimensionalList(number: String): MutableList<MutableList<Int>> {
+        var count = 0
+        var numberList = mutableListOf<MutableList<Int>>()
+        if (number != ""){
+            var listInt = mutableListOf<Int>()
+            var listIt = number.split(" ") as MutableList<String>
+            listIt.removeAt(listIt.size - 1)
+            listIt.forEach {
+                listInt.add(it.toInt())
+            }
+
+            while (count != listInt.size) {
+                count += 1 // count 1씩 증가
+                if ((count + 1) % 7 == 0) { // count(6,13...) + 1 => 7의 배수일 때
+                    val innerList = listInt.slice((count - 6)..count)
+                    numberList.add(innerList as MutableList<Int>)
+                }
+            }
+            for (i in 0..numberList.size - 1) {
+                numberList[i].sort()
+            }
+        }
+        return numberList
+    }
+
 
     // 파이어베이스 리얼타임데이터베이스 연동
     fun createRealtimeDatabase() {

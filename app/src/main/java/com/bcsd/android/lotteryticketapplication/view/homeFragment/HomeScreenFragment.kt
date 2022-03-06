@@ -1,6 +1,7 @@
 package com.bcsd.android.lotteryticketapplication.view.view.homeFragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,30 +47,51 @@ class HomeScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        todayWinningNumber()
-        pastWinningNumber()
+        getTodayWinningNumber()
+        getPastWinningNumber()
         getAllCurrentUserNumber()
         getAllPastUserNumber()
 
-        val getDate = Observer<String> {
-            homeScreenViewModel.currentUserData(it)
+        val currentDateObserver = Observer<String> {
+            homeScreenViewModel.setCurrentUserLotteryNumbers(it)
         }
-        mainViewModel.date.observe(viewLifecycleOwner, getDate)
+        mainViewModel.date.observe(viewLifecycleOwner, currentDateObserver)
     }
 
-    private fun pastWinningNumber() {
+    // 오늘의 당첨 번호
+    private fun getTodayWinningNumber() {
+        val lotteryNumbersObserver = Observer<ArrayList<Int>> {
+            var todayWinningNumbers = it
+            todayWinningNumbers.sort()
+            todayWinningNumbers.forEach {
+                when (todayWinningNumbers.indexOf(it)) {
+                    0 -> binding.todayCircleBall1.text = it.toString()
+                    1 -> binding.todayCircleBall2.text = it.toString()
+                    2 -> binding.todayCircleBall3.text = it.toString()
+                    3 -> binding.todayCircleBall4.text = it.toString()
+                    4 -> binding.todayCircleBall5.text = it.toString()
+                    5 -> binding.todayCircleBall6.text = it.toString()
+                    6 -> binding.todayCircleBall7.text = it.toString()
+                }
+            }
+        }
+        mainViewModel.lotteryNumbers.observe(viewLifecycleOwner, lotteryNumbersObserver)
+    }
+
+    // 과거 당첨 번호
+    private fun getPastWinningNumber() {
         binding.pastVisibleButton.setOnClickListener {
-            val editTextDate = binding.getDataEditText.text.toString()
-            homeScreenViewModel.pastDateUserDataMatching(editTextDate, requireContext())
+            var editTextDate = binding.editText.text.toString()
+            homeScreenViewModel.findPastLotteryNumbers(editTextDate, requireContext())
             val pastDateObserver = Observer<String> {
-                binding.pastDateText.text = it
+                binding.pastDate.text = it
             }
             homeScreenViewModel.pastDate.observe(viewLifecycleOwner, pastDateObserver)
         }
-
-        val pastWinningNumbersObserver = Observer<MutableList<Int>> { winningNumbers ->
-            winningNumbers.forEach {
-                when (winningNumbers.indexOf(it)) {
+        val pastWinningNumbersObserver = Observer<MutableList<Int>> {
+            val listIt = it
+            it.forEach {
+                when (listIt.indexOf(it)) {
                     0 -> binding.pastCircleBall1.text = it.toString()
                     1 -> binding.pastCircleBall2.text = it.toString()
                     2 -> binding.pastCircleBall3.text = it.toString()

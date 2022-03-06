@@ -23,8 +23,9 @@ class HomeScreenViewModel : ViewModel() {
 
 
     var pastwinningItems = mutableListOf<Int>()
-
+  // 데이터베이스에 저장 된 현재 날짜의 모든 회원들의 로또 번호를 불러오는 함수
     fun currentUserData(date: String) {
+  
         databaseReference = FirebaseDatabase.getInstance().getReference("User")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -102,5 +103,17 @@ class HomeScreenViewModel : ViewModel() {
                 }
             })
         }
+    }
+
+    // 문자열을 리스트로 변환하는 함수
+    fun createStringToList(it:String) : MutableList<Int>{
+        var listInt = mutableListOf<Int>()
+        val listStr = it.split(" ") as MutableList<String>
+        listStr.removeAt(listStr.size - 1)
+        listStr.forEach {
+            listInt.add(it.toInt())
+        }
+        listInt.sort()
+        return listInt
     }
 }
