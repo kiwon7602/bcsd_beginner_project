@@ -35,8 +35,8 @@ class SignInActivity : AppCompatActivity() {
 
         // 로그인 버튼 클릭 시 이벤트
         binding.signInButton.setOnClickListener {
-            val userEmail = binding.userEmail.text.toString()
-            val userPwd = binding.userPassword.text.toString()
+            val userEmail = binding.upGetUserEmailEditText.text.toString()
+            val userPwd = binding.upGetUserPasswordEditText.text.toString()
             if (userEmail == "") { // 이메일 입력이 없을 때 또는 둘 다 없을 때
                 Toast.makeText(this, "이메일을 입력하세요!", Toast.LENGTH_SHORT).show()
             } else if (userPwd == "") { // 이메일 입력은 있고, 패스워드 입력은 없을 때
