@@ -45,9 +45,10 @@ class PurchaseFragment : Fragment() {
 
         // 삭제버튼 클릭 시 현재 가지고 있는 나의 로또 번호 전체 삭제
         binding.deleteButton.setOnClickListener {
-            mainViewModel.myLotteryNumbersStr.postValue("")
+            mainViewModel.updateMyLotteryNUmbersStr("")
             mainViewModel.deleteMyLotteryNumbers()
-            mainViewModel.updateData("userLotteryNumbers", "", context)
+            mainViewModel.updateData("userLotteryNumbers", "")
+            Toast.makeText(context, "자신이 가지고있는 로또를 모두 삭제하였습니다.", Toast.LENGTH_SHORT).show()
         }
 
         // 랜덤버튼 클릭 시 0~45의 숫자 중에서 7가지의 서로 다른 번호를 얻는다.
@@ -55,9 +56,10 @@ class PurchaseFragment : Fragment() {
             if (varMoney <= 0) {
                 Toast.makeText(context, "No Money!", Toast.LENGTH_SHORT).show()
             } else {
+                Toast.makeText(context, "로또를 구매하였습니다.", Toast.LENGTH_SHORT).show()
                 varMoney -= 5000
-                mainViewModel.money.postValue(varMoney)
-                mainViewModel.updateData("money", varMoney, context)
+                mainViewModel.updateMoney(varMoney)
+                mainViewModel.updateData("money", varMoney)
 
                 var oneNumberStr = String()
                 var myRandomNumber = mainViewModel.createRandomNumber()
@@ -68,8 +70,8 @@ class PurchaseFragment : Fragment() {
 
                 createMyLotteryNumbers(varMyLotteryNumbersStr)
 
-                mainViewModel.myLotteryNumbersStr.postValue(varMyLotteryNumbersStr)
-                mainViewModel.updateData("userLotteryNumbers", varMyLotteryNumbersStr, requireContext())
+                mainViewModel.updateMyLotteryNUmbersStr(varMyLotteryNumbersStr)
+                mainViewModel.updateData("userLotteryNumbers", varMyLotteryNumbersStr)
 
                 mainViewModel.updateCurrentTimeLotteryNumbers(oneNumberStr)
 

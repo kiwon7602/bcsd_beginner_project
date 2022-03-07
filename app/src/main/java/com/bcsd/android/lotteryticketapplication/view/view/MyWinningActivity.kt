@@ -2,7 +2,6 @@ package com.bcsd.android.lotteryticketapplication.view.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,7 +22,7 @@ class MyWinningActivity : AppCompatActivity() {
         val winningDate = intent.getStringExtra("winningDate") // 당첨 날짜
         val myLotteryNumbers = intent.getStringExtra("myLotteryNumbers") // 나의 로또 번호 문자열
 
-        var myLotteryNumbersList = createMyLotteryNumbers(myLotteryNumbers.toString())
+        val myLotteryNumbersList = createMyLotteryNumbers(myLotteryNumbers.toString())
         createAdapter(myLotteryNumbersList)
         clickView(winningNumbers as ArrayList<Int>)
 
@@ -32,35 +31,35 @@ class MyWinningActivity : AppCompatActivity() {
     }
 
     // 나의 로또 번호 문자열을 2차원 리스트로 변경하는 함수
-    private fun createMyLotteryNumbers(myLotteryNumbers: String): MutableList<MutableList<Int>> {
-        var myrandnumberlist = mutableListOf<MutableList<Int>>()
+    private fun createMyLotteryNumbers(myLotteryNumbers: String): List<MutableList<Int>> {
+        val myRandNumberList = mutableListOf<MutableList<Int>>()
         var count = 0
 
         if (myLotteryNumbers?.isNotEmpty() == true) {
-            var int_list = mutableListOf<Int>()
-            val str_list = myLotteryNumbers.split(" ") as MutableList<String>
-            str_list.removeAt(str_list.size - 1)
-            str_list.forEach {
-                int_list.add(it.toInt())
+            var listInt = mutableListOf<Int>()
+            val listStr = myLotteryNumbers.split(" ") as MutableList<String>
+            listStr.removeAt(listStr.size - 1)
+            listStr.forEach {
+                listInt.add(it.toInt())
             }
 
-            while (count != int_list.size) {
+            while (count != listInt.size) {
                 count += 1
                 if ((count + 1) % 7 == 0) {
-                    val innerList = int_list.slice((count - 6)..count)
-                    myrandnumberlist.add(innerList as MutableList<Int>)
+                    val innerList = listInt.slice((count - 6)..count)
+                    myRandNumberList.add(innerList as MutableList<Int>)
                 }
             }
-            for (i in 0..myrandnumberlist.size - 1) {
-                myrandnumberlist[i].sort()
+            for (i in 0..myRandNumberList.size - 1) {
+                myRandNumberList[i].sort()
             }
         }
-        return myrandnumberlist
+        return myRandNumberList
     }
 
     // 나의 로또 번호 2차원 리스트를 어뎁터를 통해서 리사이클러 뷰에 연결
-    private fun createAdapter(myrandnumberlist: MutableList<MutableList<Int>>) {
-        adapter = MyWinningAdapter(myrandnumberlist)
+    private fun createAdapter(myRandNumberList: List<MutableList<Int>>) {
+        adapter = MyWinningAdapter(myRandNumberList)
         binding.myWinningRecyclerView.adapter = adapter
         binding.myWinningRecyclerView.layoutManager = GridLayoutManager(this, 3)
     }
@@ -68,10 +67,10 @@ class MyWinningActivity : AppCompatActivity() {
     // 회원의 각 로또 번호를 클릭하여 확인할 수 있는 함수
     private fun clickView(winningNumbers: ArrayList<Int>) {
         adapter.setItemClickListener(object : MyWinningAdapter.OnItemClickListener {
-            override fun onClick(v: View, position: Int, lottery: MutableList<Int>) {
+            override fun onClick(v: View, position: Int, lottery: List<Int>) {
                 binding.textMyLotteryNumbers.text = lottery.toString()
-                var viewLotteryNumbers = arrayListOf<Int>()
-                var count_list = arrayListOf<Int>()
+                val viewLotteryNumbers = arrayListOf<Int>()
+                val listCount = arrayListOf<Int>()
 
                 lottery.forEach {
                     viewLotteryNumbers.add(it)
@@ -79,12 +78,12 @@ class MyWinningActivity : AppCompatActivity() {
 
                 viewLotteryNumbers.forEach {
                     if (it in winningNumbers!!) {
-                        count_list.add(it)
+                        listCount.add(it)
                     }
                 }
 
-                binding.textSameNumberList.text = count_list.toString()
-                binding.textSameNumber.text = count_list.size.toString()
+                binding.textSameNumberList.text = listCount.toString()
+                binding.textSameNumber.text = listCount.size.toString()
             }
         })
     }

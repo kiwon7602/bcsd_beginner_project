@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bcsd.android.lotteryticketapplication.R
 
 class HomeScreenAdapter(
-    val itemList : MutableList<MutableList<Int>>
+    val itemList : List<MutableList<Int>>
 ) : RecyclerView.Adapter<HomeScreenAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ball1 = itemView.findViewById<TextView>(R.id.past_circle_ball_1)
@@ -30,7 +30,7 @@ class HomeScreenAdapter(
     }
 
     interface OnItemClickListener {
-        fun onClick(v: View, position: Int, lottery:MutableList<Int>)
+        fun onClick(v: View, position: Int, lottery:List<Int>)
     }
 
     private lateinit var itemClickListener: OnItemClickListener

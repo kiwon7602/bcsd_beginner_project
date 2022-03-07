@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -49,8 +50,8 @@ class MyPageFragment : Fragment() {
         // 예치금 5000원씩 추가
         binding.rechargeMoney.setOnClickListener {
             rechargeMoney += 5000
-            mainViewModel.money.postValue(rechargeMoney)
-            mainViewModel.updateData("money", rechargeMoney, requireContext())
+            mainViewModel.updateMoney(rechargeMoney)
+            mainViewModel.updateData("money", rechargeMoney)
         }
 
         // 나의 당첨 내역확인 화면으로 이동

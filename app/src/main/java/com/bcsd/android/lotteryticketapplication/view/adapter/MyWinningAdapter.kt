@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bcsd.android.lotteryticketapplication.R
 
 class MyWinningAdapter(
-    val myLotteryList: MutableList<MutableList<Int>>
+    val myLotteryList: List<MutableList<Int>>
 ) : RecyclerView.Adapter<MyWinningAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val myLotteryCount = itemView.findViewById<TextView>(R.id.text_1)
@@ -18,7 +18,7 @@ class MyWinningAdapter(
     }
 
     interface OnItemClickListener {
-        fun onClick(v: View, position: Int, lottery: MutableList<Int>)
+        fun onClick(v: View, position: Int, lottery: List<Int>)
     }
 
     private lateinit var itemClickListener: OnItemClickListener

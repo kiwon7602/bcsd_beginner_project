@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".view.view.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
     </application>
 
 </manifest>
