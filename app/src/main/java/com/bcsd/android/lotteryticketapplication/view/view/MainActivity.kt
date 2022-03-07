@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bcsd.android.lotteryticketapplication.R
 import com.bcsd.android.lotteryticketapplication.databinding.ActivityMainBinding
@@ -30,34 +31,55 @@ class MainActivity : AppCompatActivity() {
         // retrofit2, database 데이터 불러올 때 progressbar 띄우기
         binding.progressBar.visibility = View.VISIBLE
 
-
+        // fragment 내 상태유지를 위해서 replace -> add 사용
         manager
             .beginTransaction()
-            .replace(R.id.main_frame, homeScreenFragment)
+            .add(R.id.main_frame, myPageFragment)
+            .add(R.id.main_frame, purchaseFragment)
+            .add(R.id.main_frame, homeScreenFragment)
             .commit()
+
+        // bottom navigation
+        createNavigation()
+
+        // retrofit2, database 데이터 관찰(observe)
+        val isRunningObserver = Observer<ArrayList<Boolean>> {
+            if (false !in it) { // 두 개 데이터 관찰 중(retrofit2,database) false 가 없을 시 progressbar is gone
+                binding.progressBar.visibility = View.GONE
+            }
+        }
+        mainViewModel.isRunning.observe(this, isRunningObserver)
+
+        mainViewModel.createRealtimeDatabase()
+        mainViewModel.createRetrofit()
     }
 
-
-    private fun createBottomNavigation() {
+    private fun createNavigation() {
         val navigation = binding.mainNavigation
         navigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home_navigation -> {
                     manager
                         .beginTransaction()
-                        .replace(R.id.main_frame, homeScreenFragment)
+                        .show(homeScreenFragment)
+                        .hide(myPageFragment)
+                        .hide(purchaseFragment)
                         .commit()
                 }
                 R.id.purchase_navigation -> {
                     manager
                         .beginTransaction()
-                        .replace(R.id.main_frame, purchaseFragment)
+                        .show(purchaseFragment)
+                        .hide(homeScreenFragment)
+                        .hide(myPageFragment)
                         .commit()
                 }
                 R.id.my_page_navigation -> {
                     manager
                         .beginTransaction()
-                        .replace(R.id.main_frame, myPageFragment)
+                        .show(myPageFragment)
+                        .hide(homeScreenFragment)
+                        .hide(purchaseFragment)
                         .commit()
                 }
             }

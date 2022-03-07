@@ -2,5 +2,5 @@
     <string name="app_name">LotteryTicketApplication</string>
     <string name="home">Home</string>
     <string name="purchase">Purchase</string>
-    <string name="myPage">MyPage</string>
+    <string name="my_page">MyPage</string>
 </resources>

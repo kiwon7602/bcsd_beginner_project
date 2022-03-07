@@ -9,9 +9,11 @@
     <color name="grey">#9E9E9E</color>
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFFFF000</color>
-    <color name="lightYellow">#ECEAD6</color>
+    <color name="light_yellow">#ECEAD6</color>
     <color name="green">#008000</color>
     <color name="blue">#0067A3</color>
     <color name="purple">#8B00FF</color>
     <color name="red">#FF0000</color>
+    <color name="light_grey_98">#98DFD8</color>
+    <color name="dip_yellow_bb">#BBDC58</color>
 </resources>
