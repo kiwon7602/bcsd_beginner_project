@@ -2,9 +2,11 @@ package com.bcsd.android.lotteryticketapplication.view.view.mypageFragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -46,14 +48,14 @@ class MyPageFragment : Fragment() {
         updateObserveData()
 
         // 예치금 5000원씩 추가
-        binding.rechargeMoney.setOnClickListener {
+        binding.functionChargeCardView.setOnClickListener {
             rechargeMoney += 5000
-            mainViewModel.money.postValue(rechargeMoney)
-            mainViewModel.updateData("money", rechargeMoney, context)
+            mainViewModel.updateMoney(rechargeMoney)
+            mainViewModel.updateData("money", rechargeMoney)
         }
 
         // 나의 당첨 내역확인 화면으로 이동
-        binding.checkWinning.setOnClickListener {
+        binding.functionCheckWinningCardView.setOnClickListener {
             val intent = Intent(context, MyWinningActivity::class.java)
             intent.putExtra("winningNumbers", winningNumbers)
             intent.putExtra("winningDate", mainViewModel.date.value)
@@ -98,13 +100,13 @@ class MyPageFragment : Fragment() {
 
     private fun updateObserveData() {
         val emailObserver = Observer<String> {
-            binding.pvtEmail.text = it.toString()
+            binding.showEmailTextView.text = it.toString()
         }
         val nameObserver = Observer<String> {
-            binding.pvtName.text = it.toString()
+            binding.showNameTextView.text = it.toString()
         }
         val moneyObserver = Observer<Int> {
-            binding.pvtMoney.text = it.toString()
+            binding.showMoneyTextView.text = it.toString()
             rechargeMoney = it
         }
         val lotteryNumbersObserver = Observer<ArrayList<Int>> {

@@ -2,6 +2,7 @@ package com.bcsd.android.lotteryticketapplication.view.viewmodel
 
 import android.content.Context
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bcsd.android.lotteryticketapplication.view.model.LotteryNumber
@@ -25,9 +26,11 @@ class MainViewModel : ViewModel() {
 
     val email = MutableLiveData<String>()
     val name = MutableLiveData<String>()
-    val money = MutableLiveData<Int>()
+    private val _money = MutableLiveData<Int>()
+    val money :LiveData<Int> = _money
     val date = MutableLiveData<String>()
-    val myLotteryNumbersStr = MutableLiveData<String>()
+    private val _myLotteryNumbersStr = MutableLiveData<String>()
+    val myLotteryNumbersStr : LiveData<String> = _myLotteryNumbersStr
     val myLotteryNumbers = MutableLiveData<MutableList<MutableList<Int>>>()
     val lotteryNumbers = MutableLiveData<ArrayList<Int>>()
 
@@ -44,6 +47,13 @@ class MainViewModel : ViewModel() {
         myLotteryNumbers.postValue(myLotteryItems)
     }
 
+    fun updateMoney(_value:Int){
+        _money.postValue(_value)
+    }
+    fun updateMyLotteryNUmbersStr(_value:String){
+        _myLotteryNumbersStr.postValue(_value)
+    }
+
     // 당첨 번호 업데이트 함수 ( http 통신 완료 후 받아온 데이터(당첨 번호) )
     fun updateLotteryNumbers(lotteryList: ArrayList<Int>) {
         lotteryItems.clear()
@@ -53,7 +63,7 @@ class MainViewModel : ViewModel() {
     }
 
     // 회원 별 로또 번호 업데이트 함수
-    fun updateMyLotteryNumbers(myLotteryList: MutableList<MutableList<Int>>) {
+    fun updateMyLotteryNumbers(myLotteryList: List<MutableList<Int>>) {
         myLotteryItems.clear()
         myLotteryItems.addAll(myLotteryList)
         myLotteryNumbers.postValue(myLotteryItems)
@@ -93,7 +103,7 @@ class MainViewModel : ViewModel() {
 
     // 데이터베이스 값 변경 업데이트 함수
     // 매개변수 : 경로 이름, 변경 할 값(타입 : Any), 사용하는 view context
-    fun updateData(key: String, value: Any, context: Context?) {
+    fun updateData(key: String, value: Any) {
         val firebaseAuth = FirebaseAuth.getInstance()
         // map 사용 -> {"1":"1","2":2...}
         var map = mutableMapOf<String, Any>()
@@ -102,7 +112,6 @@ class MainViewModel : ViewModel() {
             .updateChildren(map)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Toast.makeText(context, "데이터 업데이트 성공", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -117,7 +126,7 @@ class MainViewModel : ViewModel() {
     }
 
     // 문자열을 받아 2차원 리스트로 변경하는 함수
-    fun createTwoDimensionalList(number: String): MutableList<MutableList<Int>> {
+    fun createTwoDimensionalList(number: String): List<MutableList<Int>> {
         var count = 0
         var numberList = mutableListOf<MutableList<Int>>()
         if (number != ""){
@@ -162,10 +171,10 @@ class MainViewModel : ViewModel() {
                         name.postValue(userValue.value.toString())
                     }
                     if (userValue.key == "money") {
-                        money.postValue(userValue.value.toString().toInt())
+                        _money.postValue(userValue.value.toString().toInt())
                     }
                     if (userValue.key == "userLotteryNumbers") {
-                        myLotteryNumbersStr.postValue(userValue.value.toString())
+                        _myLotteryNumbersStr.postValue(userValue.value.toString())
                     }
                 }
             }
