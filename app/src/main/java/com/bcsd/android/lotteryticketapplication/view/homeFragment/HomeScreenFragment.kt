@@ -59,9 +59,10 @@ class HomeScreenFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.editText.setText("")
+        binding.getDataEditText.setText("")
         homeScreenViewModel.updatePastAllUserLotteryNumbers("")
         homeScreenViewModel.updatePastDate("")
+        homeScreenViewModel.updatePastWinningNumbers(emptyList())
     }
 
     // 오늘의 당첨 번호
@@ -86,7 +87,7 @@ class HomeScreenFragment : Fragment() {
     // 과거 당첨 번호
     private fun getPastWinningNumber() {
         binding.pastVisibleButton.setOnClickListener {
-            val editTextDate = binding.editText.text.toString()
+            val editTextDate = binding.getDataEditText.text.toString()
             if (editTextDate.isEmpty()){
                 Toast.makeText(context, "날짜를 입력하세요.", Toast.LENGTH_SHORT).show()
             } else {
@@ -94,7 +95,7 @@ class HomeScreenFragment : Fragment() {
                 getAllPastUserNumber()
             }
             val pastDateObserver = Observer<String> {
-                binding.pastDate.text = it
+                binding.pastDateText.text = it
             }
             homeScreenViewModel.pastDate.observe(viewLifecycleOwner, pastDateObserver)
         }

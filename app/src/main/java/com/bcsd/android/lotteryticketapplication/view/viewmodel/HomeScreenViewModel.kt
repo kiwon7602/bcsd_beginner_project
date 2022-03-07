@@ -54,29 +54,29 @@ class HomeScreenViewModel : ViewModel() {
     // 과거 로또 번호가 존재하는 지 확인하는 함수
     fun findPastLotteryNumbers(editTextDate: String) {
         databaseReference = FirebaseDatabase.getInstance().getReference("User")
-            databaseReference.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val value = snapshot.child("LotteryNumbers")
-                        .child(editTextDate)
-                    val valueCustomer = snapshot.child("LotteryNumbers")
-                        .child(editTextDate).child("customer")
-                    if (valueCustomer.exists()){
-                        val masterNumber = value.child("master").value.toString()
-                        val customerNumber = value.child("customer").value.toString()
-                        _pastAllUserLotteryNumbers.postValue(customerNumber)
-                        _pastDate.postValue(editTextDate)
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.child("LotteryNumbers")
+                    .child(editTextDate)
+                val valueCustomer = snapshot.child("LotteryNumbers")
+                    .child(editTextDate).child("customer")
+                if (valueCustomer.exists()){
+                    val masterNumber = value.child("master").value.toString()
+                    val customerNumber = value.child("customer").value.toString()
+                    _pastAllUserLotteryNumbers.postValue(customerNumber)
+                    _pastDate.postValue(editTextDate)
 
-                        val listInt = createStringToList(masterNumber)
+                    val listInt = createStringToList(masterNumber)
 
-                        updatePastWinningNumbers(listInt)
-                    } else {
-                        _pastAllUserLotteryNumbers.postValue(null)
-                    }
+                    updatePastWinningNumbers(listInt)
+                } else {
+                    _pastAllUserLotteryNumbers.postValue(null)
                 }
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
     }
 
     // 문자열을 리스트로 변환하는 함수

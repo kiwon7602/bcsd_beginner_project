@@ -26,8 +26,8 @@ class MyWinningActivity : AppCompatActivity() {
         createAdapter(myLotteryNumbersList)
         clickView(winningNumbers as ArrayList<Int>)
 
-        binding.textDate.text = winningDate
-        binding.textLotteryNumbers.text = winningNumbers.toString()
+        binding.showDataTextView.text = winningDate
+        binding.showTodayLotteryNumbersTextView.text = winningNumbers.toString()
     }
 
     // 나의 로또 번호 문자열을 2차원 리스트로 변경하는 함수
@@ -68,7 +68,7 @@ class MyWinningActivity : AppCompatActivity() {
     private fun clickView(winningNumbers: ArrayList<Int>) {
         adapter.setItemClickListener(object : MyWinningAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int, lottery: List<Int>) {
-                binding.textMyLotteryNumbers.text = lottery.toString()
+                binding.showUserLotteryNumbersTextView.text = lottery.toString()
                 val viewLotteryNumbers = arrayListOf<Int>()
                 val listCount = arrayListOf<Int>()
 
@@ -82,8 +82,8 @@ class MyWinningActivity : AppCompatActivity() {
                     }
                 }
 
-                binding.textSameNumberList.text = listCount.toString()
-                binding.textSameNumber.text = listCount.size.toString()
+                binding.showUserSameNumberListTextView.text = listCount.toString()
+                binding.countSameNumberTextView.text = listCount.size.toString()
             }
         })
     }
