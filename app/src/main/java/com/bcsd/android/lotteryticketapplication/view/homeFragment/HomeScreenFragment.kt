@@ -53,7 +53,8 @@ class HomeScreenFragment : Fragment() {
         getAllPastUserNumber()
 
         val currentDateObserver = Observer<String> {
-            homeScreenViewModel.setCurrentUserLotteryNumbers(it)
+            //homeScreenViewModel.setCurrentUserLotteryNumbers(it)
+            // 머지 과정에서 소실된 것으로 추정되어 추후 추가될 기능
         }
         mainViewModel.date.observe(viewLifecycleOwner, currentDateObserver)
     }
@@ -81,17 +82,18 @@ class HomeScreenFragment : Fragment() {
     // 과거 당첨 번호
     private fun getPastWinningNumber() {
         binding.pastVisibleButton.setOnClickListener {
-            var editTextDate = binding.editText.text.toString()
-            homeScreenViewModel.findPastLotteryNumbers(editTextDate, requireContext())
+            val editTextDate = binding.getDataEditText.text.toString()
+            // homeScreenViewModel.findPastLotteryNumbers(editTextDate, requireContext())
+            // 머지 과정에서 소실된 것으로 추정되어 추후 추가될 기능
             val pastDateObserver = Observer<String> {
-                binding.pastDate.text = it
+                binding.pastDateText.text = it
             }
             homeScreenViewModel.pastDate.observe(viewLifecycleOwner, pastDateObserver)
         }
-        val pastWinningNumbersObserver = Observer<MutableList<Int>> {
-            val listIt = it
-            it.forEach {
-                when (listIt.indexOf(it)) {
+        val pastWinningNumbersObserver = Observer<MutableList<Int>> { PastListIt ->
+
+            PastListIt.forEach {
+                when (PastListIt.indexOf(it)) {
                     0 -> binding.pastCircleBall1.text = it.toString()
                     1 -> binding.pastCircleBall2.text = it.toString()
                     2 -> binding.pastCircleBall3.text = it.toString()
@@ -152,8 +154,8 @@ class HomeScreenFragment : Fragment() {
     }
 
     private fun todayWinningNumber() {
-        val lotteryNumbersObserver = Observer<MutableList<Int>> { winningNumbers ->
-            var todayWinningNumbers = winningNumbers
+        val lotteryNumbersObserver = Observer<MutableList<Int>> { todayWinningNumbers ->
+            var todayWinningNumbers = todayWinningNumbers
             todayWinningNumbers.sort()
             todayWinningNumbers.forEach { winningNumbers ->
                 when (todayWinningNumbers.indexOf(winningNumbers)) {
@@ -176,9 +178,9 @@ class HomeScreenFragment : Fragment() {
     ) {
         val winnerHistory = mutableListOf<Int>(0, 0, 0, 0, 0, 0, 0, 0)
         var rankingCount = 0
-        allUserList.forEach { list_it ->
+        allUserList.forEach { user ->
             rankingCount = 0
-            list_it.forEach {
+            user.forEach {
                 if (it in winningNumber)
                     rankingCount += 1
             }

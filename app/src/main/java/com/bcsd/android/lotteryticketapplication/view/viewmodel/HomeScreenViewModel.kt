@@ -2,6 +2,7 @@ package com.bcsd.android.lotteryticketapplication.view.viewmodel
 
 import android.content.Context
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.database.*
@@ -10,7 +11,7 @@ class HomeScreenViewModel : ViewModel() {
     private lateinit var databaseReference: DatabaseReference
 
     private val _currentAllUserLotteryNumbers = MutableLiveData<String>()
-    val currentAllUserLotteryNumbers = _currentAllUserLotteryNumbers
+    val currentAllUserLotteryNumbers : LiveData<String> = _currentAllUserLotteryNumbers
 
     private val _pastAllUserLotteryNumbers = MutableLiveData<String>()
     val pastAllUserLotteryNumbers = _pastAllUserLotteryNumbers
@@ -23,9 +24,10 @@ class HomeScreenViewModel : ViewModel() {
 
 
     var pastwinningItems = mutableListOf<Int>()
-  // 데이터베이스에 저장 된 현재 날짜의 모든 회원들의 로또 번호를 불러오는 함수
+
+    // 데이터베이스에 저장 된 현재 날짜의 모든 회원들의 로또 번호를 불러오는 함수
     fun currentUserData(date: String) {
-  
+
         databaseReference = FirebaseDatabase.getInstance().getReference("User")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -80,20 +82,20 @@ class HomeScreenViewModel : ViewModel() {
                     val value = snapshot.child("LotteryNumbers")
                         .child(editTextDate)
                     if (value.exists()) {
-                        val masternumber = value.child("master").value.toString()
-                        val customernumber = value.child("customer").value.toString()
-                        pastAllUserLotteryNumbers.postValue(customernumber)
+                        val masterNumber = value.child("master").value.toString()
+                        val customerNumber = value.child("customer").value.toString()
+                        pastAllUserLotteryNumbers.postValue(customerNumber)
                         pastDate.postValue(editTextDate)
 
-                        val int_list = mutableListOf<Int>()
-                        val str_list = masternumber.split(" ") as MutableList<String>
-                        str_list.removeAt(str_list.size - 1)
-                        str_list.forEach {
-                            int_list.add(it.toInt())
+                        val pastNumberIntData = mutableListOf<Int>()
+                        val pastNumberStrData = masterNumber.split(" ") as MutableList<String>
+                        pastNumberStrData.removeAt(pastNumberStrData.size - 1)
+                        pastNumberStrData.forEach {
+                            pastNumberIntData.add(it.toInt())
                         }
-                        int_list.sort()
+                        pastNumberIntData.sort()
 
-                        pastWinningData(int_list)
+                        pastWinningData(pastNumberIntData)
                     } else {
                         Toast.makeText(context, "해당 날짜에 번호가 없습니다.", Toast.LENGTH_SHORT).show()
                     }
@@ -106,7 +108,7 @@ class HomeScreenViewModel : ViewModel() {
     }
 
     // 문자열을 리스트로 변환하는 함수
-    fun createStringToList(it:String) : MutableList<Int>{
+    fun createStringToList(it: String): MutableList<Int> {
         var listInt = mutableListOf<Int>()
         val listStr = it.split(" ") as MutableList<String>
         listStr.removeAt(listStr.size - 1)
