@@ -16,46 +16,43 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel : ViewModel() {
-    private val retrofit: Retrofit = Retrofit.Builder()
+    val retrofit = Retrofit.Builder()
         .baseUrl("https://api2.ysmstudio.be/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val service: MainService = retrofit.create(MainService::class.java)
+    val service = retrofit.create(MainService::class.java)
 
     private lateinit var databaseReference: DatabaseReference
 
-    private val _email = MutableLiveData<String>() // 유저 이메일
-    val email: LiveData<String> = _email
-
-    private val _name = MutableLiveData<String>() // 유저 이름
-    val name: LiveData<String> = _name
-
-    private val _money = MutableLiveData<Int>() // 유저 예치금
-    val money: LiveData<Int> = _money
-
-    private val _myLotteryNumbers =
-        MutableLiveData<String>() // 유저 로또 번호 문자열 (숫자 사이 공백, 데이터베이스 저장 시)
-    val myLotteryNumbers = _myLotteryNumbers
-
-    val myLotteryNumbersList =
-        MutableLiveData<MutableList<MutableList<Int>>>() // 유저 로또 번호 2차원 리스트(정수형)
-
-    val lotteryNumbers = MutableLiveData<ArrayList<Int>>() // 당첨 번호
-    val date = MutableLiveData<String>() // 당첨 날짜
+    val email = MutableLiveData<String>()
+    val name = MutableLiveData<String>()
+    private val _money = MutableLiveData<Int>()
+    val money :LiveData<Int> = _money
+    val date = MutableLiveData<String>()
+    private val _myLotteryNumbersStr = MutableLiveData<String>()
+    val myLotteryNumbersStr : LiveData<String> = _myLotteryNumbersStr
+    val myLotteryNumbers = MutableLiveData<MutableList<MutableList<Int>>>()
+    val lotteryNumbers = MutableLiveData<ArrayList<Int>>()
 
     // retrofit2, database 데이터 받아올 때, 크기 2인 boolean(false, true) 타입 리스트
     val isRunning = MutableLiveData<ArrayList<Boolean>>()
 
-    private val lotteryItems = ArrayList<Int>() // 당첨 번호를 담고 있을 리스트
-    private val myLotteryItems = mutableListOf<MutableList<Int>>() // 유저 로또 번호를 담을 2차원 리스트(정수형)
-    private val isRunningItems: ArrayList<Boolean> =
-        arrayListOf(false, false) // isRunning 라이브 데이터를 대신 할 리스트
+    val lotteryItems = ArrayList<Int>()
+    val myLotteryItems = mutableListOf<MutableList<Int>>()
+    val isRunningItems: ArrayList<Boolean> = arrayListOf(false, false)
 
     // 나의 당첨 번호 삭제
-    fun deleteMyLotteryNumbers() {
+    fun deleteMyLotteryNumbers(){
         myLotteryItems.clear()
+        myLotteryNumbers.postValue(myLotteryItems)
     }
-    myLotteryNumbers.postValue(myLotteryItems)
+
+    fun updateMoney(_value:Int){
+        _money.postValue(_value)
+    }
+    fun updateMyLotteryNUmbersStr(_value:String){
+        _myLotteryNumbersStr.postValue(_value)
+    }
 
     // 당첨 번호 업데이트 함수 ( http 통신 완료 후 받아온 데이터(당첨 번호) )
     fun updateLotteryNumbers(lotteryList: ArrayList<Int>) {
@@ -66,14 +63,14 @@ class MainViewModel : ViewModel() {
     }
 
     // 회원 별 로또 번호 업데이트 함수
-    fun updateMyLotteryNumbers(myLotteryList: MutableList<MutableList<Int>>) {
+    fun updateMyLotteryNumbers(myLotteryList: List<MutableList<Int>>) {
         myLotteryItems.clear()
         myLotteryItems.addAll(myLotteryList)
         myLotteryNumbers.postValue(myLotteryItems)
     }
 
     // 해당날짜의 회원이 구매한 로또를 모두 모아 데이터베이스에 저장
-    fun updateCurrentTimeLotteryNumbers(randomNumberStr: String) {
+    fun updateCurrentTimeLotteryNumbers(randomNumberStr:String){
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val value = snapshot.child("LotteryNumbers")
@@ -106,7 +103,7 @@ class MainViewModel : ViewModel() {
 
     // 데이터베이스 값 변경 업데이트 함수
     // 매개변수 : 경로 이름, 변경 할 값(타입 : Any), 사용하는 view context
-    fun updateData(key: String, value: Any, context: Context) {
+    fun updateData(key: String, value: Any) {
         val firebaseAuth = FirebaseAuth.getInstance()
         // map 사용 -> {"1":"1","2":2...}
         var map = mutableMapOf<String, Any>()
@@ -115,13 +112,12 @@ class MainViewModel : ViewModel() {
             .updateChildren(map)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Toast.makeText(context, "데이터 업데이트 성공", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
     // 7개의 번호를 랜덤으로 생성하는 함수
-    fun createRandomNumber(): MutableSet<Int> {
+    fun createRandomNumber():MutableSet<Int>{
         var randomSet = mutableSetOf<Int>()
         while (randomSet.size <= 6) {
             randomSet.add((1..45).random())
@@ -130,10 +126,10 @@ class MainViewModel : ViewModel() {
     }
 
     // 문자열을 받아 2차원 리스트로 변경하는 함수
-    fun createTwoDimensionalList(number: String): MutableList<MutableList<Int>> {
+    fun createTwoDimensionalList(number: String): List<MutableList<Int>> {
         var count = 0
         var numberList = mutableListOf<MutableList<Int>>()
-        if (number != "") {
+        if (number != ""){
             var listInt = mutableListOf<Int>()
             var listIt = number.split(" ") as MutableList<String>
             listIt.removeAt(listIt.size - 1)
@@ -175,10 +171,10 @@ class MainViewModel : ViewModel() {
                         name.postValue(userValue.value.toString())
                     }
                     if (userValue.key == "money") {
-                        money.postValue(userValue.value.toString().toInt())
+                        _money.postValue(userValue.value.toString().toInt())
                     }
                     if (userValue.key == "userLotteryNumbers") {
-                        myLotteryNumbers.postValue(userValue.value.toString())
+                        _myLotteryNumbersStr.postValue(userValue.value.toString())
                     }
                 }
             }

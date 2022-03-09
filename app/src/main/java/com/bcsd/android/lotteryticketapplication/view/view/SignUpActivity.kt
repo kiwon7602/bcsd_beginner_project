@@ -36,9 +36,9 @@ class SignUpActivity : AppCompatActivity() {
 
         // 회원가입 버튼 클릭 시 이벤트
         binding.signUpButton.setOnClickListener {
-            val userEmail = binding.userEmail.text.toString()
-            val userPassword = binding.userPassword.text.toString()
-            val userName = binding.userName.text.toString()
+            val userEmail = binding.upGetUserEmailEditText.text.toString()
+            val userPassword = binding.upGetUserPasswordEditText.text.toString()
+            val userName = binding.upGetUserNameEditText.text.toString()
             if (userEmail == "") { // 이메일 미입력 또는 이메일, 패스워드 미입력 시
                 Toast.makeText(this, "이메일을 입력하세요!", Toast.LENGTH_SHORT).show()
             } else if (userPassword == "") { // 패스워드 미입력 시

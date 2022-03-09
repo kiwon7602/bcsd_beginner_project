@@ -1,7 +1,6 @@
 package com.bcsd.android.lotteryticketapplication.view.view.homeFragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ class HomeScreenFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var mainViewModel: MainViewModel
     private lateinit var homeScreenViewModel: HomeScreenViewModel
+
     private lateinit var adapter: HomeScreenAdapter
 
     override fun onCreateView(
@@ -46,23 +46,28 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getTodayWinningNumber()
         getPastWinningNumber()
         getAllCurrentUserNumber()
-        getAllPastUserNumber()
+
 
         val currentDateObserver = Observer<String> {
-            //homeScreenViewModel.setCurrentUserLotteryNumbers(it)
-            // 머지 과정에서 소실된 것으로 추정되어 추후 추가될 기능
+            homeScreenViewModel.setCurrentUserLotteryNumbers(it)
         }
         mainViewModel.date.observe(viewLifecycleOwner, currentDateObserver)
     }
 
+    override fun onStart() {
+        super.onStart()
+        binding.getDataEditText.setText("")
+        homeScreenViewModel.updatePastAllUserLotteryNumbers("")
+        homeScreenViewModel.updatePastDate("")
+        homeScreenViewModel.updatePastWinningNumbers(emptyList())
+    }
+
     // 오늘의 당첨 번호
     private fun getTodayWinningNumber() {
-        val lotteryNumbersObserver = Observer<ArrayList<Int>> {
-            var todayWinningNumbers = it
+        val lotteryNumbersObserver = Observer<ArrayList<Int>> { todayWinningNumbers ->
             todayWinningNumbers.sort()
             todayWinningNumbers.forEach {
                 when (todayWinningNumbers.indexOf(it)) {
@@ -83,17 +88,20 @@ class HomeScreenFragment : Fragment() {
     private fun getPastWinningNumber() {
         binding.pastVisibleButton.setOnClickListener {
             val editTextDate = binding.getDataEditText.text.toString()
-            // homeScreenViewModel.findPastLotteryNumbers(editTextDate, requireContext())
-            // 머지 과정에서 소실된 것으로 추정되어 추후 추가될 기능
+            if (editTextDate.isEmpty()){
+                Toast.makeText(context, "날짜를 입력하세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                homeScreenViewModel.findPastLotteryNumbers(editTextDate)
+                getAllPastUserNumber()
+            }
             val pastDateObserver = Observer<String> {
                 binding.pastDateText.text = it
             }
             homeScreenViewModel.pastDate.observe(viewLifecycleOwner, pastDateObserver)
         }
-        val pastWinningNumbersObserver = Observer<MutableList<Int>> { PastListIt ->
-
-            PastListIt.forEach {
-                when (PastListIt.indexOf(it)) {
+        val pastWinningNumbersObserver = Observer<MutableList<Int?>> { pastWinningNum ->
+            pastWinningNum.forEach {
+                when (pastWinningNum.indexOf(it)){
                     0 -> binding.pastCircleBall1.text = it.toString()
                     1 -> binding.pastCircleBall2.text = it.toString()
                     2 -> binding.pastCircleBall3.text = it.toString()
@@ -110,28 +118,37 @@ class HomeScreenFragment : Fragment() {
         )
     }
 
+    // 과거 회원들의 로또 번호 리사이클러 뷰
     private fun getAllPastUserNumber() {
         val pastLotteryNumbers = Observer<String> {
-            val allUserNumberList = homeScreenViewModel.makeTwoDimensionalList(it)
-            adapter = HomeScreenAdapter(allUserNumberList)
-            binding.lotteryBallsRecyclerView.adapter = adapter
-            binding.lotteryBallsRecyclerView.layoutManager = LinearLayoutManager(view?.context)
-            adapter.setItemClickListener(object : HomeScreenAdapter.OnItemClickListener {
-                override fun onClick(v: View, position: Int, lottery: List<Int>) {
-                    var count = 0
-                    val pastNumbers = Observer<MutableList<Int>> {
-                        count = 0
+            if (it == null) {
+                homeScreenViewModel.updatePastDate("번호가 없는 날짜입니다.")
+                homeScreenViewModel.updatePastAllUserLotteryNumbers("")
+                binding.pastCircleBall1.setText("")
+                binding.pastCircleBall2.setText("")
+                binding.pastCircleBall3.setText("")
+                binding.pastCircleBall4.setText("")
+                binding.pastCircleBall5.setText("")
+                binding.pastCircleBall6.setText("")
+                binding.pastCircleBall7.setText("")
+            } else {
+                val allUserNumberList = mainViewModel.createTwoDimensionalList(it)
+                adapter = HomeScreenAdapter(allUserNumberList)
+                binding.lotteryBallsRecyclerView.adapter = adapter
+                binding.lotteryBallsRecyclerView.layoutManager = LinearLayoutManager(view?.context)
+                adapter.setItemClickListener(object : HomeScreenAdapter.OnItemClickListener {
+                    override fun onClick(v: View, position: Int, lottery: List<Int>) {
+                        var count = 0
+                        val pastWinningNumbers = homeScreenViewModel.pastWinningNumbers.value!!
                         lottery.forEach { number ->
-                            if (number in it) {
+                            if (number in pastWinningNumbers) {
                                 count++
                             }
                         }
+                        Toast.makeText(requireContext(), "$count 개 일치!", Toast.LENGTH_SHORT).show()
                     }
-                    Toast.makeText(requireContext(), "$count 개 일치!", Toast.LENGTH_SHORT).show()
-                    homeScreenViewModel.pastWinningNumbers.observe(viewLifecycleOwner, pastNumbers)
-
-                }
-            })
+                })
+            }
         }
         homeScreenViewModel.pastAllUserLotteryNumbers.observe(
             viewLifecycleOwner,
@@ -139,9 +156,10 @@ class HomeScreenFragment : Fragment() {
         )
     }
 
+    // 모든 회원들의 로또 번호
     private fun getAllCurrentUserNumber() {
         val allUserNumberObserver = Observer<String> {
-            val allUserNumberList = homeScreenViewModel.makeTwoDimensionalList(it)
+            val allUserNumberList = mainViewModel.createTwoDimensionalList(it)
             val winningNumbers = Observer<ArrayList<Int>> {
                 checkWinningRanking(allUserNumberList, it)
             }
@@ -153,61 +171,37 @@ class HomeScreenFragment : Fragment() {
         )
     }
 
-    private fun todayWinningNumber() {
-        val lotteryNumbersObserver = Observer<MutableList<Int>> { todayWinningNumbers ->
-            var todayWinningNumbers = todayWinningNumbers
-            todayWinningNumbers.sort()
-            todayWinningNumbers.forEach { winningNumbers ->
-                when (todayWinningNumbers.indexOf(winningNumbers)) {
-                    0 -> binding.todayCircleBall1.text = winningNumbers.toString()
-                    1 -> binding.todayCircleBall2.text = winningNumbers.toString()
-                    2 -> binding.todayCircleBall3.text = winningNumbers.toString()
-                    3 -> binding.todayCircleBall4.text = winningNumbers.toString()
-                    4 -> binding.todayCircleBall5.text = winningNumbers.toString()
-                    5 -> binding.todayCircleBall6.text = winningNumbers.toString()
-                    6 -> binding.todayCircleBall7.text = winningNumbers.toString()
-                }
-            }
-        }
-        mainViewModel.lotteryNumbers.observe(viewLifecycleOwner, lotteryNumbersObserver)
-    }
-
+    // 오늘의 번호와 오늘의 회원 번호를 비교하여 n자리 수를 확인하는 함수
     private fun checkWinningRanking(
         allUserList: List<MutableList<Int>>,
-        winningNumber: ArrayList<Int>
+        winningNumber: List<Int>
     ) {
-        val winnerHistory = mutableListOf<Int>(0, 0, 0, 0, 0, 0, 0, 0)
-        var rankingCount = 0
-        allUserList.forEach { user ->
-            rankingCount = 0
-            user.forEach {
+        val winnerhistory = mutableListOf<Int>(0, 0, 0, 0, 0, 0, 0, 0)
+        allUserList.forEach { listIt ->
+            var rankingcount = 0
+            listIt.forEach {
                 if (it in winningNumber)
-                    rankingCount += 1
+                    rankingcount += 1
             }
-            when (rankingCount) {
-                0 -> winnerHistory[0] += 1
-                1 -> winnerHistory[1] += 1
-                2 -> winnerHistory[2] += 1
-                3 -> winnerHistory[3] += 1
-                4 -> winnerHistory[4] += 1
-                5 -> winnerHistory[5] += 1
-                6 -> winnerHistory[6] += 1
-                7 -> winnerHistory[7] += 1
-            }
-        }
-        winnerHistory.forEach {
-            var historyIndex = winnerHistory.indexOf(it)
-            when (historyIndex) {
-                0 -> binding.currentNum0.text = it.toString()
-                1 -> binding.currentNum1.text = it.toString()
-                2 -> binding.currentNum2.text = it.toString()
-                3 -> binding.currentNum3.text = it.toString()
-                4 -> binding.currentNum4.text = it.toString()
-                5 -> binding.currentNum5.text = it.toString()
-                6 -> binding.currentNum6.text = it.toString()
-                7 -> binding.currentNum7.text = it.toString()
+            when (rankingcount) {
+                0 -> winnerhistory[0] += 1
+                1 -> winnerhistory[1] += 1
+                2 -> winnerhistory[2] += 1
+                3 -> winnerhistory[3] += 1
+                4 -> winnerhistory[4] += 1
+                5 -> winnerhistory[5] += 1
+                6 -> winnerhistory[6] += 1
+                7 -> winnerhistory[7] += 1
             }
         }
-    }
+        binding.currentNum0.text = winnerhistory[0].toString()
+        binding.currentNum1.text = winnerhistory[1].toString()
+        binding.currentNum2.text = winnerhistory[2].toString()
+        binding.currentNum3.text = winnerhistory[3].toString()
+        binding.currentNum4.text = winnerhistory[4].toString()
+        binding.currentNum5.text = winnerhistory[5].toString()
+        binding.currentNum6.text = winnerhistory[6].toString()
+        binding.currentNum7.text = winnerhistory[7].toString()
 
+    }
 }
