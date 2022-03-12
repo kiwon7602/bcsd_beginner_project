@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_yellow">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/user_data_card_view"
+                android:layout_width="384dp"
+                android:layout_height="191dp"
+                android:layout_marginTop="16dp"
+                android:foregroundGravity="center"
+                android:orientation="horizontal"
+                app:cardBackgroundColor="@color/design_default_color_secondary"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center|left"
+                    android:src="@drawable/ic_baseline_person_pin_24" />
+
+                <TextView
+                    android:id="@+id/show_name_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="50dp"
+                    android:layout_weight="1"
+                    android:text="이름"
+                    android:textColor="@color/black"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:id="@+id/show_email_text_view"
+                    android:layout_width="183dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="65dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="이메일"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/show_money_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginStart="15dp"
+                    android:text="예치금"
+                    android:textColor="@color/black"
+                    android:textSize="30dp" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/function_charge_card_view"
+                android:layout_width="384dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="40dp"
+                android:background="?attr/selectableItemBackground"
+                android:foregroundGravity="center"
+                android:orientation="horizontal"
+                app:cardBackgroundColor="@color/design_default_color_surface"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_data_card_view">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="40dp"
+                    android:text="예치금 충전하기"
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="130dp"
+                    android:background="@null"
+                    android:src="@drawable/size_money" />
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/function_check_winning_card_view"
+                android:layout_width="384dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="40dp"
+                android:foregroundGravity="center"
+                android:orientation="horizontal"
+                app:cardBackgroundColor="@color/design_default_color_surface"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/function_charge_card_view">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="150dp"
+                    android:backgroundTint="@color/white"
+                    android:src="@drawable/size_winning" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:text="나의 당첨 내역 확인하기"
+                    android:textSize="26dp"
+                    android:textStyle="bold" />
+
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/sign_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:backgroundTint="@color/grey"
+                android:text="로그아웃"
+                app:layout_constraintEnd_toStartOf="@id/delete_account_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/function_check_winning_card_view" />
+
+            <Button
+                android:id="@+id/delete_account_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:backgroundTint="@color/grey"
+                android:text="회원탈퇴"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/sign_out_button"
+                app:layout_constraintTop_toBottomOf="@id/function_check_winning_card_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>
