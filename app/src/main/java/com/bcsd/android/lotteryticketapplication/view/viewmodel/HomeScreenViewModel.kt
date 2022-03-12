@@ -18,6 +18,9 @@ class HomeScreenViewModel : ViewModel() {
     private val _pastDate = MutableLiveData<String>()
     val pastDate : LiveData<String> = _pastDate
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> get() = _isLoading
+
     var pastWinningItems = mutableListOf<Int?>()
 
     // 데이터베이스에 저장 된 현재 날짜의 모든 회원들의 로또 번호를 불러오는 함수
@@ -53,6 +56,7 @@ class HomeScreenViewModel : ViewModel() {
 
     // 과거 로또 번호가 존재하는 지 확인하는 함수
     fun findPastLotteryNumbers(editTextDate: String) {
+        _isLoading.value = true
         databaseReference = FirebaseDatabase.getInstance().getReference("User")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -69,6 +73,8 @@ class HomeScreenViewModel : ViewModel() {
                     val listInt = createStringToList(masterNumber)
 
                     updatePastWinningNumbers(listInt)
+
+                    _isLoading.value = false
                 } else {
                     _pastAllUserLotteryNumbers.postValue(null)
                 }

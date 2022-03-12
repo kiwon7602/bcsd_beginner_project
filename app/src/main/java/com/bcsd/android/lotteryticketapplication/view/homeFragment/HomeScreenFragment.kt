@@ -1,5 +1,7 @@
 package com.bcsd.android.lotteryticketapplication.view.view.homeFragment
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +28,12 @@ class HomeScreenFragment : Fragment() {
     private lateinit var homeScreenViewModel: HomeScreenViewModel
 
     private lateinit var adapter: HomeScreenAdapter
+
+    private val loadingDialog: Dialog by lazy {
+        AlertDialog.Builder(requireContext())
+            .setMessage("Loading...")
+            .create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +63,11 @@ class HomeScreenFragment : Fragment() {
             homeScreenViewModel.setCurrentUserLotteryNumbers(it)
         }
         mainViewModel.date.observe(viewLifecycleOwner, currentDateObserver)
+
+        homeScreenViewModel.isLoading.observe(viewLifecycleOwner) {
+            if(it) loadingDialog.show()
+            else loadingDialog.hide()
+        }
     }
 
     override fun onStart() {
